@@ -1,13 +1,16 @@
+import query_handler
 from menus import *
 from store import store
 from connect import *
 from validation.signup_validation import valid_user
 from validation.login_validation import valid_entry
+from query_handler import *
 
 store = store()
 db = get_db()
 cursor = db.cursor()
-
+store.db = db
+store.cursor = cursor
 
 def user_dash_board():
     print("success")
@@ -23,15 +26,6 @@ def signup():
     email = input('enter your email:\n>')
     security_question_answer = input('what is your favorite color? (as the security question)\n>')
 
-    # user = {
-    #     "username": 'amirfazel22',
-    #     "password": 'animals21',
-    #     "first_name": 'amir',
-    #     "last_name": 'kzr',
-    #     "phone_number": '09308100815',
-    #     "email": 'amirfazel45@gmail.com',
-    #     "security_question_answer": 'blue'
-    # }
     user = {
         "username": username,
         "password": password,
@@ -41,8 +35,10 @@ def signup():
         "email": email,
         "security_question_answer": security_question_answer
     }
+
     user_validity = valid_user(user, cursor)
     if user_validity:
+        query_handler.sign_up(user)
         user_dash_board()
     else:
         print(user_validity)
