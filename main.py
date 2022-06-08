@@ -58,6 +58,7 @@ def login():
     }
     user_validity = valid_entry(user, cursor)
     if user_validity:
+        query_handler.log_in(user)
         user_dash_board()
     else:
         print(user_validity)
