@@ -10,9 +10,10 @@ def valid_user(user, cursor):
     mail_is_valid = valid_mail(user, cursor)
     phone_is_valid = valid_phone_number(user, cursor)
     password_is_valid = valid_password(user)
-    print(name_is_valid, ID_is_valid, mail_is_valid, phone_is_valid, password_is_valid)
+    answer_is_valid = valid_question_answer(user)
+    print(name_is_valid, ID_is_valid, mail_is_valid, phone_is_valid, password_is_valid, answer_is_valid)
 
-    return name_is_valid and mail_is_valid and ID_is_valid and phone_is_valid and password_is_valid
+    return name_is_valid and mail_is_valid and ID_is_valid and phone_is_valid and password_is_valid and answer_is_valid
 
 
 def valid_name(user):
@@ -135,3 +136,10 @@ def user_exists(user, cursor):
         if username in row:
             return True
     return False
+
+
+def valid_question_answer(user):
+    if user["security_question_answer"].rstrip() == '':
+        store.signup_error_message = store.signup_error_message + 'answer to security question should not be EMPTY! \n'
+        return False
+    return True

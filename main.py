@@ -33,7 +33,7 @@ def signup():
         "last_name": last_name,
         "phone_number": phone_number,
         "email": email,
-        "security_question_answer": security_question_answer
+        "security_question_answer": security_question_answer.lower()
     }
 
     user_validity = valid_user(user, cursor)
