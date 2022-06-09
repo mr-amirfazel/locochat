@@ -1,0 +1,5 @@
+1) Chats
+2) Friends
+3) Search
+4) Blocked users
+5) Log out
