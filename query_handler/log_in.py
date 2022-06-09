@@ -7,6 +7,7 @@ import datetime
 db = get_db()
 cursor = db.cursor()
 
+
 def log_in(user):
     ts = time.time()
     login_date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
