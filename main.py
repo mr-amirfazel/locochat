@@ -4,13 +4,15 @@ from store import store
 from connect import *
 from validation.signup_validation import valid_user
 from validation.login_validation import valid_entry
-from query_handler import *
+from query_handler.sign_up import sign_up
+from query_handler.log_in import log_in
 
 store = store()
 db = get_db()
 cursor = db.cursor()
 store.db = db
 store.cursor = cursor
+
 
 def user_dash_board():
     print("success")
@@ -38,7 +40,7 @@ def signup():
 
     user_validity = valid_user(user, cursor)
     if user_validity:
-        query_handler.sign_up(user)
+        sign_up(user)
         user_dash_board()
     else:
         print(user_validity)
@@ -58,7 +60,7 @@ def login():
     }
     user_validity = valid_entry(user, cursor)
     if user_validity:
-        query_handler.log_in(user)
+        log_in(user)
         user_dash_board()
     else:
         print(user_validity)

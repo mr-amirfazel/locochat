@@ -4,5 +4,6 @@ class Store(object):
             cls.instance = super(Store, cls).__new__(cls)
         return cls.instance
 
+
 def store():
     return Store
