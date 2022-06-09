@@ -25,19 +25,19 @@ import mysql.connector as connector
 
 NAME = "locochat"
 
-
-def get_db():
-    db = connector.connect(
-        host="localhost",
-        user="root",
-        passwd="DbMYSQL2003",
-        database=NAME
-    )
-    return db
-
-
-db = get_db()
-cursor = db.cursor()
+#
+# def get_db():
+#     db = connector.connect(
+#         host="localhost",
+#         user="root",
+#         passwd="DbMYSQL2003",
+#         database=NAME
+#     )
+#     return db
+#
+#
+# db = get_db()
+# cursor = db.cursor()
 # username = "amirfazel22"
 # usernames = []
 # usernames.append(username)
@@ -57,33 +57,61 @@ import secrets
 # print(t)
 # t = secrets.token_hex(25)
 # print(len(t))
-from hashlib import sha256
+# from hashlib import sha256
+#
+# user = {
+#     "username": input('username: '),
+#     "password": input('password: '),
+#     "first_name": input('first_name: '),
+#     "last_name": input('last_name: '),
+#     "phone_number": input('phone_number: '),
+#     "email": input('email: '),
+#     "security_question_answer": input('fav color: ')
+# }
+# token = secrets.token_hex(25)
+# sql = """
+#         insert into `users`
+#         (token, userID, first_name, last_name, phone_number, email, password_hashed, security_question_answer)
+#         VALUES
+#         (%s, %s, %s, %s, %s, %s, %s, %s)
+#         """
+# val = (token, user['username'], user["first_name"], user["last_name"], user["phone_number"], user["email"],
+#        sha256(user["password"].encode('utf-8')).hexdigest(), user["security_question_answer"])
+#
+# try:
+#     cursor.execute(sql, val)
+#     db.commit()
+#     print("added to db")
+#
+# except Exception as inst:
+#     print("not added")
+#     print(inst)
+#     db.rollback()
 
-user = {
-    "username": input('username: '),
-    "password": input('password: '),
-    "first_name": input('first_name: '),
-    "last_name": input('last_name: '),
-    "phone_number": input('phone_number: '),
-    "email": input('email: '),
-    "security_question_answer": input('fav color: ')
-}
-token = secrets.token_hex(25)
+from connect import *
+
+db = get_db()
+cursor = db.cursor()
+
+
+
 sql = """
-        insert into `users`
-        (token, userID, first_name, last_name, phone_number, email, password_hashed, security_question_answer)
-        VALUES
-        (%s, %s, %s, %s, %s, %s, %s, %s)
-        """
-val = (token, user['username'], user["first_name"], user["last_name"], user["phone_number"], user["email"],
-       sha256(user["password"].encode('utf-8')).hexdigest(), user["security_question_answer"])
+    select count(entered_user_ID), entered_user_ID
+    from `logins`
+    where login_situation = '1'
+    """
 
 try:
-    cursor.execute(sql, val)
-    db.commit()
-    print("added to db")
+        cursor.execute(sql)
+        res = cursor.fetchall()
+        print(res)
+        count = res[0][0]
+        username = res[0][1]
+        print(username)
+        user = {"username": username}
+        db.commit()
 
 except Exception as inst:
-    print("not added")
-    print(inst)
-    db.rollback()
+        print(inst)
+        db.rollback()
+

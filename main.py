@@ -7,6 +7,7 @@ from validation.login_validation import valid_entry
 from query_handler.sign_up import sign_up
 from query_handler.log_in import log_in
 from query_handler.log_out import log_out
+from query_handler.logged_in_user import *
 
 store = store()
 db = get_db()
@@ -16,7 +17,7 @@ store.cursor = cursor
 user = {}
 
 
-def user_dash_board():
+def user_dash_board(user):
     while True:
         menus.dash_board_menu()
         user_input = input("choose an option\n>")
@@ -44,7 +45,6 @@ def signup():
     email = input('enter your email:\n>')
     security_question_answer = input('what is your favorite color? (as the security question)\n>')
 
-    global user
     user = {
         "username": username,
         "password": password,
@@ -58,7 +58,7 @@ def signup():
     user_validity = valid_user(user, cursor)
     if user_validity:
         sign_up(user)
-        user_dash_board()
+        user_dash_board(user)
     else:
         print(user_validity)
         print(store.signup_error_message)
@@ -72,7 +72,6 @@ def login():
     username = input('please enter your username: ')
     password = input('please enter your password: ')
 
-    global user
     user = {
         "username": username,
         "password": password
@@ -80,7 +79,7 @@ def login():
     user_validity = valid_entry(user, cursor)
     if user_validity:
         log_in(user)
-        user_dash_board()
+        user_dash_board(user)
     else:
         print(user_validity)
         print(store.login_error_message)
@@ -90,6 +89,10 @@ def login():
 
 if __name__ == "__main__":
     welcome_text()
+    count, user = check_login()
+    # print(count)
+    if count:
+        user_dash_board(user)
     while True:
         enter_menu()
         user_choice = input()
