@@ -1,4 +1,4 @@
-import query_handler
+import menus
 from menus import *
 from store import store
 from connect import *
@@ -15,8 +15,21 @@ store.cursor = cursor
 
 
 def user_dash_board():
-    print("success")
-    pass
+    while True:
+        menus.dash_board_menu()
+        user_input = input("choose an option\n>")
+        if user_input == '1':
+            pass
+        elif user_input == '2':
+            pass
+        elif user_input == '3':
+            pass
+        elif user_input == '4':
+            pass
+        elif user_input == '5':
+            break
+        else:
+            print("you may have entered a wrong value")
 
 
 def signup():

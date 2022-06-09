@@ -16,6 +16,7 @@ def user_existence(user, cursor):
         store.login_error_message = store.login_error_message + 'User does not exist in database\n'
         return False
 
+
 def user_exists(user, cursor):
     username = user['username']
     username = str(username)
@@ -31,6 +32,7 @@ def user_exists(user, cursor):
             return True
     return False
 
+
 def password_match(user, cursor):
     username = user['username']
     password = user['password']
@@ -43,7 +45,7 @@ def password_match(user, cursor):
     result = cursor.fetchall()
 
     for row in result:
-        if row[0] == username and row[1] == hashlib.sha256(password):
+        if row[0] == username and row[1] == hashlib.sha256(password.encode('utf-8')).hexdigest():
             return True
     store.login_error_message = store.login_error_message + 'password doesnt match'
     return False
