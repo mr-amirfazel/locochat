@@ -6,12 +6,14 @@ from validation.signup_validation import valid_user
 from validation.login_validation import valid_entry
 from query_handler.sign_up import sign_up
 from query_handler.log_in import log_in
+from query_handler.log_out import log_out
 
 store = store()
 db = get_db()
 cursor = db.cursor()
 store.db = db
 store.cursor = cursor
+user = {}
 
 
 def user_dash_board():
@@ -27,6 +29,7 @@ def user_dash_board():
         elif user_input == '4':
             pass
         elif user_input == '5':
+            log_out(user)
             break
         else:
             print("you may have entered a wrong value")
@@ -41,6 +44,7 @@ def signup():
     email = input('enter your email:\n>')
     security_question_answer = input('what is your favorite color? (as the security question)\n>')
 
+    global user
     user = {
         "username": username,
         "password": password,
@@ -67,6 +71,8 @@ def signup():
 def login():
     username = input('please enter your username: ')
     password = input('please enter your password: ')
+
+    global user
     user = {
         "username": username,
         "password": password
