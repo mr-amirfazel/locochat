@@ -16,12 +16,11 @@ db = get_db()
 cursor = db.cursor()
 store.db = db
 store.cursor = cursor
-user = {}
 
 
 def user_dash_board(user):
     while True:
-        print('\n\n'+CliColors.WARNING + '______' + '{}'.format(user["username"]) + '______' + CliColors.ENDC)
+        print('\n\n' + CliColors.WARNING + '______' + '{}'.format(user["username"]) + '______' + CliColors.ENDC)
         print(CliColors.OKGREEN + '****' + 'Dash Board' + '****' + CliColors.ENDC)
         menus.dash_board_menu()
         user_input = input("choose an option\n>").rstrip()
@@ -47,6 +46,7 @@ def search_handler(user):
     user_search_str = input("enter the username to be searched\n>")
     result_array = search(user_search_str)
     print_search_result(result_array, user)
+    friend_request_handler(result_array, user)
 
 
 def print_search_result(result_array, user):
@@ -56,8 +56,29 @@ def print_search_result(result_array, user):
     print("search results:")
     for i, t in enumerate(result_array):
         if t[0] == user["username"]:
-            print(CliColors.WARNING + '' + '{i} ) {id} (YOU)'.format(i=i + 1, id=t[0]) + '' + CliColors.ENDC)
+            print(CliColors.WARNING + '' + '{i} ) {id} (YOU)'.format(i=i + 1, id=t[0]) + CliColors.ENDC)
         print('{i} ) {id}'.format(i=i + 1, id=t[0]))
+
+
+def friend_request_handler(result_array, user):
+    friend_req_target = input('which one do you wish to send a friend_request to?')
+
+    if not friend_req_target.isdigit():
+        print(CliColors.FAIL + 'please enter a number' + CliColors.ENDC)
+        friend_request_handler(result_array, user)
+
+    friend_req_target = int(friend_req_target)
+    friend_req_target = friend_req_target - 1
+
+    if friend_req_target < 0 or friend_req_target > len(result_array):
+        print(CliColors.FAIL + 'index out of border....' + CliColors.ENDC)
+        friend_request_handler(result_array, user)
+
+    if result_array[friend_req_target][0] == user["username"]:
+        print(CliColors.FAIL + 'You cant send a request to yourself... try again' + CliColors.ENDC)
+        friend_request_handler(result_array, user)
+
+    dest_ID = result_array[friend_req_target][0]
 
 
 def signup():
