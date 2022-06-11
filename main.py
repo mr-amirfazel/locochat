@@ -8,6 +8,8 @@ from query_handler.sign_up import sign_up
 from query_handler.log_in import log_in
 from query_handler.log_out import log_out
 from query_handler.logged_in_user import *
+from query_handler.search import search
+from cli_assets.cli_colors import CliColors
 
 store = store()
 db = get_db()
@@ -19,21 +21,43 @@ user = {}
 
 def user_dash_board(user):
     while True:
+        print('\n\n'+CliColors.WARNING + '______' + '{}'.format(user["username"]) + '______' + CliColors.ENDC)
+        print(CliColors.OKGREEN + '****' + 'Dash Board' + '****' + CliColors.ENDC)
         menus.dash_board_menu()
-        user_input = input("choose an option\n>")
+        user_input = input("choose an option\n>").rstrip()
         if user_input == '1':
             pass
         elif user_input == '2':
             pass
         elif user_input == '3':
+            search_handler(user)
             pass
         elif user_input == '4':
             pass
         elif user_input == '5':
             log_out(user)
             break
+        elif user_input == '6':
+            pass
         else:
             print("you may have entered a wrong value")
+
+
+def search_handler(user):
+    user_search_str = input("enter the username to be searched\n>")
+    result_array = search(user_search_str)
+    print_search_result(result_array, user)
+
+
+def print_search_result(result_array, user):
+    if len(result_array) == 0:
+        print("no such user found")
+        return
+    print("search results:")
+    for i, t in enumerate(result_array):
+        if t[0] == user["username"]:
+            print(CliColors.WARNING + '' + '{i} ) {id} (YOU)'.format(i=i + 1, id=t[0]) + '' + CliColors.ENDC)
+        print('{i} ) {id}'.format(i=i + 1, id=t[0]))
 
 
 def signup():
