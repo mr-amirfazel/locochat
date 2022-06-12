@@ -69,17 +69,6 @@ def print_search_result(result_array, user):
 def friend_request_handler(result_array, user):
     friend_req_target = input('which one do you wish to send a friend_request to?\n>')
 
-    # if not friend_req_target.isdigit():
-    #     print(CliColors.FAIL + 'please enter a number' + CliColors.ENDC)
-    #     friend_request_handler(result_array, user)
-    #
-    # friend_req_target = int(friend_req_target)
-    # friend_req_target = friend_req_target - 1
-    #
-    # if friend_req_target < 0 or friend_req_target > len(result_array):
-    #     print(CliColors.FAIL + 'index out of border....' + CliColors.ENDC)
-    #     friend_request_handler(result_array, user)
-
     if not index_is_valid(friend_req_target, len(result_array)):
         friend_request_handler(result_array, user)
         return
@@ -221,7 +210,6 @@ def login():
 if __name__ == "__main__":
     welcome_text()
     count, user = check_login()
-    # print(count)
     if count:
         user_dash_board(user)
     while True:
