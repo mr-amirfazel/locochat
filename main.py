@@ -12,6 +12,7 @@ from query_handler.logged_in_user import *
 from query_handler.search import search
 from cli_assets.cli_colors import CliColors
 from query_handler.friend_request_utils import *
+from query_handler.friends_utils import *
 
 store = store()
 db = get_db()
@@ -122,11 +123,11 @@ def user_sent_requests(username):
 def user_received_requests(username):
     result_array = received_requests(username)
     print_requests(result_array)
-    print(""""HELP NOTE:\n
-    you can accept a  request using keyword `acc` along with the index you want to accept\n
-    reject a request using keyword `rej`along with the index you want to reject\n
+    print(""""HELP NOTE:
+    you can accept a  request using keyword `acc` along with the index you want to accept
+    reject a request using keyword `rej`along with the index you want to reject
     or close the section using keyword `ext`""")
-    user_input = input('enter your choice (dont forget to use spaces ;))')
+    user_input = input('enter your choice (dont forget to use spaces ;))\n>')
     input_splited = user_input.split(' ')
     command = input_splited[0]
     if command == 'acc':
@@ -144,10 +145,17 @@ def update_request_situation(username, index, result, sit):
     if not index_is_valid(index, len(result)):
         user_received_requests(username)
         return
+    index = int(index)
     index -= 1
+    if not result[index][1] == RequestLevels.PENDING:
+        print("you already have decided about this request and can't change it")
+        return
     request_sender_ID = result[index][0]
+
     update_request(request_sender_ID, username, sit)
 
+    if sit == RequestLevels.ACCEPTED:
+        add_friends(username, request_sender_ID)
 
 
 def print_requests(result_array):
@@ -178,7 +186,7 @@ def signup():
         "security_question_answer": security_question_answer.lower()
     }
 
-    user_validity = valid_user(user, cursor)
+    user_validity = valid_user(user)
     if user_validity:
         sign_up(user)
         user_dash_board(user)

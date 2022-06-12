@@ -96,7 +96,6 @@ def received_requests(username):
     try:
         cursor.execute(sql, val)
         res = cursor.fetchall()
-        print(res)
         db.commit()
         return res
 

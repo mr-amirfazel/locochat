@@ -1,14 +1,17 @@
 from store import store
+from connect import *
 
+db = get_db()
+cursor = db.cursor()
 store = store()
 
 
-def valid_user(user, cursor):
+def valid_user(user):
     store.signup_error_message = ''
     name_is_valid = valid_name(user)
-    ID_is_valid = valid_ID(user, cursor)
-    mail_is_valid = valid_mail(user, cursor)
-    phone_is_valid = valid_phone_number(user, cursor)
+    ID_is_valid = valid_ID(user)
+    mail_is_valid = valid_mail(user)
+    phone_is_valid = valid_phone_number(user)
     password_is_valid = valid_password(user)
     answer_is_valid = valid_question_answer(user)
     print(name_is_valid, ID_is_valid, mail_is_valid, phone_is_valid, password_is_valid, answer_is_valid)
@@ -43,9 +46,9 @@ def valid_password(user):
     return True
 
 
-def valid_phone_number(user, cursor):
+def valid_phone_number(user):
     print("valid phone")
-    return valid_phone_digit(user) and valid_phone_len(user) and not phone_number_exists(user, cursor)
+    return valid_phone_digit(user) and valid_phone_len(user) and not phone_number_exists(user)
 
 
 def valid_phone_len(user):
@@ -62,7 +65,7 @@ def valid_phone_digit(user):
     return False
 
 
-def phone_number_exists(user, cursor):
+def phone_number_exists(user):
     number = user['phone_number']
     query = """
     select phone_number
@@ -76,10 +79,10 @@ def phone_number_exists(user, cursor):
     return False
 
 
-def valid_mail(user, cursor):
+def valid_mail(user):
     print("valid mail")
-    print("mail exists: ", email_exists(user, cursor))
-    return valid_email_combination(user) and not email_exists(user, cursor)
+    print("mail exists: ", email_exists(user))
+    return valid_email_combination(user) and not email_exists(user)
 
 
 def valid_email_combination(user):
@@ -89,7 +92,7 @@ def valid_email_combination(user):
     return False
 
 
-def email_exists(user, cursor):
+def email_exists(user):
     email = user['email']
     query = """
     select email
@@ -105,10 +108,10 @@ def email_exists(user, cursor):
     return False
 
 
-def valid_ID(user, cursor):
+def valid_ID(user):
     print("valid id")
-    print("ID exists ", user_exists(user, cursor))
-    return valid_ID_combination(user) and not user_exists(user, cursor)
+    print("ID exists ", user_exists(user))
+    return valid_ID_combination(user) and not user_exists(user)
 
 
 def valid_ID_combination(user):
@@ -122,7 +125,7 @@ def valid_ID_combination(user):
     return True
 
 
-def user_exists(user, cursor):
+def user_exists(user):
     username = user['username']
     username = str(username)
     query = """
