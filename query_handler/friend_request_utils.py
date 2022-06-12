@@ -83,3 +83,61 @@ def reverse_request(src, dst):
     except Exception as inst:
         print(inst)
         db.rollback()
+
+
+def received_requests(username):
+    sql = """
+               select sender_ID, request_situation
+               from `friendrequests`
+               where  reciever_ID =%s
+               """
+    val = (username,)
+
+    try:
+        cursor.execute(sql, val)
+        res = cursor.fetchall()
+        print(res)
+        db.commit()
+        return res
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
+
+
+def sent_requests(username):
+    sql = """
+                   select reciever_ID, request_situation
+                   from `friendrequests`
+                   where  sender_ID =%s
+                   """
+    val = (username,)
+
+    try:
+        cursor.execute(sql, val)
+        res = cursor.fetchall()
+        print(res)
+        db.commit()
+        return res
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
+
+
+def update_request(src, dst, situation):
+    sql = """
+    UPDATE friendrequests 
+    SET request_situation = %s 
+    WHERE sender_ID = %s and reciever_ID = %s
+    """
+    val = (situation, src, dst)
+
+    try:
+        cursor.execute(sql, val)
+        db.commit()
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
+

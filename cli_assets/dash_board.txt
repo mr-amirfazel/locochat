@@ -1,6 +1,7 @@
 1) Chats
 2) Friends
 3) Search
-4) Blocked users
-5) Log out
-6) Delete Account
+4) Friend requests
+5) Blocked users
+6) Log out
+7) Delete Account

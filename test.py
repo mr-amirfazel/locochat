@@ -114,3 +114,6 @@
 # # except Exception as inst:
 # #         print(inst)
 # #         db.rollback()
+smp = 'hi there'.split(' ')
+print(smp[0])
+print(smp[1])

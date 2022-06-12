@@ -4,6 +4,7 @@ from store import store
 from connect import *
 from validation.signup_validation import valid_user
 from validation.login_validation import valid_entry
+from validation.index_validation import index_is_valid
 from query_handler.sign_up import sign_up
 from query_handler.log_in import log_in
 from query_handler.log_out import log_out
@@ -33,11 +34,13 @@ def user_dash_board(user):
             search_handler(user)
             pass
         elif user_input == '4':
-            pass
+            requests(user)
         elif user_input == '5':
+            pass
+        elif user_input == '6':
             log_out(user)
             break
-        elif user_input == '6':
+        elif user_input == '7':
             pass
         else:
             print("you may have entered a wrong value")
@@ -63,18 +66,24 @@ def print_search_result(result_array, user):
 
 
 def friend_request_handler(result_array, user):
-    friend_req_target = input('which one do you wish to send a friend_request to?')
+    friend_req_target = input('which one do you wish to send a friend_request to?\n>')
 
-    if not friend_req_target.isdigit():
-        print(CliColors.FAIL + 'please enter a number' + CliColors.ENDC)
+    # if not friend_req_target.isdigit():
+    #     print(CliColors.FAIL + 'please enter a number' + CliColors.ENDC)
+    #     friend_request_handler(result_array, user)
+    #
+    # friend_req_target = int(friend_req_target)
+    # friend_req_target = friend_req_target - 1
+    #
+    # if friend_req_target < 0 or friend_req_target > len(result_array):
+    #     print(CliColors.FAIL + 'index out of border....' + CliColors.ENDC)
+    #     friend_request_handler(result_array, user)
+
+    if not index_is_valid(friend_req_target, len(result_array)):
         friend_request_handler(result_array, user)
-
+        return
     friend_req_target = int(friend_req_target)
-    friend_req_target = friend_req_target - 1
-
-    if friend_req_target < 0 or friend_req_target > len(result_array):
-        print(CliColors.FAIL + 'index out of border....' + CliColors.ENDC)
-        friend_request_handler(result_array, user)
+    friend_req_target -= 1
 
     if result_array[friend_req_target][0] == user["username"]:
         print(CliColors.FAIL + 'You cant send a request to yourself... try again' + CliColors.ENDC)
@@ -92,6 +101,62 @@ def friend_request_handler(result_array, user):
         print('A request had already been sent from {} to you. You can go and accept it'.format(dest_ID))
         return
     send_request(user["username"], dest_ID)
+
+
+def requests(user):
+    user_choice = input('1) sent requests\n2) received requests\n>')
+    username = user["username"]
+    if user_choice == '1':
+        user_sent_requests(username)
+    elif user_choice == '2':
+        user_received_requests(username)
+    else:
+        print('you may have entered wrong value')
+
+
+def user_sent_requests(username):
+    result_array = sent_requests(username)
+    print_requests(result_array)
+
+
+def user_received_requests(username):
+    result_array = received_requests(username)
+    print_requests(result_array)
+    print(""""HELP NOTE:\n
+    you can accept a  request using keyword `acc` along with the index you want to accept\n
+    reject a request using keyword `rej`along with the index you want to reject\n
+    or close the section using keyword `ext`""")
+    user_input = input('enter your choice (dont forget to use spaces ;))')
+    input_splited = user_input.split(' ')
+    command = input_splited[0]
+    if command == 'acc':
+        update_request_situation(username, input_splited[1], result_array, RequestLevels.ACCEPTED)
+    elif command == 'rej':
+        update_request_situation(username, input_splited[1], result_array, RequestLevels.REJECTED)
+    elif command == 'ext':
+        return
+    else:
+        print('you may have entered wrong entry')
+        return
+
+
+def update_request_situation(username, index, result, sit):
+    if not index_is_valid(index, len(result)):
+        user_received_requests(username)
+        return
+    index -= 1
+    request_sender_ID = result[index][0]
+    update_request(request_sender_ID, username, sit)
+
+
+
+def print_requests(result_array):
+    if len(result_array) == 0:
+        print('no request found!...')
+        return
+    print(CliColors.OKBLUE + '   User_ID\t\tSituation' + CliColors.ENDC)
+    for ind, row in enumerate(result_array):
+        print('{}) {}\t\t{}'.format(ind + 1, row[0], row[1]))
 
 
 def signup():
