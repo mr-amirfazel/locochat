@@ -10,6 +10,7 @@ from query_handler.log_out import log_out
 from query_handler.logged_in_user import *
 from query_handler.search import search
 from cli_assets.cli_colors import CliColors
+from query_handler.friend_request_utils import *
 
 store = store()
 db = get_db()
@@ -57,7 +58,8 @@ def print_search_result(result_array, user):
     for i, t in enumerate(result_array):
         if t[0] == user["username"]:
             print(CliColors.WARNING + '' + '{i} ) {id} (YOU)'.format(i=i + 1, id=t[0]) + CliColors.ENDC)
-        print('{i} ) {id}'.format(i=i + 1, id=t[0]))
+        else:
+            print('{i} ) {id}'.format(i=i + 1, id=t[0]))
 
 
 def friend_request_handler(result_array, user):
@@ -76,9 +78,20 @@ def friend_request_handler(result_array, user):
 
     if result_array[friend_req_target][0] == user["username"]:
         print(CliColors.FAIL + 'You cant send a request to yourself... try again' + CliColors.ENDC)
-        friend_request_handler(result_array, user)
+        return
 
     dest_ID = result_array[friend_req_target][0]
+
+    if is_friend(user["username"], dest_ID):
+        print('You are already a friend of {}'.format(dest_ID))
+        return
+    if request_exists(user["username"], dest_ID):
+        print('A request had already been sent to {}'.format(dest_ID))
+        return
+    if reverse_request(user["username"], dest_ID):
+        print('A request had already been sent from {} to you. You can go and accept it'.format(dest_ID))
+        return
+    send_request(user["username"], dest_ID)
 
 
 def signup():
