@@ -13,6 +13,7 @@ from query_handler.search import search
 from cli_assets.cli_colors import CliColors
 from query_handler.friend_request_utils import *
 from query_handler.friends_utils import *
+from query_handler.blocks_utils import *
 
 store = store()
 db = get_db()
@@ -30,7 +31,7 @@ def user_dash_board(user):
         if user_input == '1':
             pass
         elif user_input == '2':
-            pass
+            display_friends(user)
         elif user_input == '3':
             search_handler(user)
             pass
@@ -47,11 +48,34 @@ def user_dash_board(user):
             print("you may have entered a wrong value")
 
 
+def display_friends(user):
+    username = user["username"]
+    friends = get_friends(username)
+    if len(friends) == 0:
+        print('YOU have no friends You are alone Get a life loser...')
+        return
+    for ind, row in enumerate(friends):
+        print('{}) {}'.format(ind + 1, row[0]))
+
+
 def search_handler(user):
     user_search_str = input("enter the username to be searched\n>")
     result_array = search(user_search_str)
     print_search_result(result_array, user)
-    friend_request_handler(result_array, user)
+    # friend_request_handler(result_array, user)
+    print(""""HELP NOTE:
+    you can send a friend request using keyword `frnd` along with the index you want to send request to
+    block a user using keyword `blck`along with the index you want to block
+    or close the section enter anything else""")
+    user_input = input('enter your choice here:\n>')
+    data_list = user_input.split(' ')
+    cmd = data_list[0]
+    if cmd == 'frnd':
+        friend_request_handler(result_array, user, data_list[1])
+    elif cmd == 'blck':
+        block_user_handler(result_array, user, data_list[1])
+    else:
+        return
 
 
 def print_search_result(result_array, user):
@@ -66,11 +90,32 @@ def print_search_result(result_array, user):
             print('{i} ) {id}'.format(i=i + 1, id=t[0]))
 
 
-def friend_request_handler(result_array, user):
-    friend_req_target = input('which one do you wish to send a friend_request to?\n>')
+def block_user_handler(result_array, user, index):
+    if not index_is_valid(index, len(result_array)):
+        block_user_handler(result_array, user, index)
+        return
+    index = int(index) - 1
 
+    if result_array[index][0] == user["username"]:
+        print(CliColors.FAIL + 'You cant block yourself... try again' + CliColors.ENDC)
+        return
+
+    block_target = result_array[index][0]
+
+    if is_friend(user["username"], block_target):
+        remove_friends(user["username"], block_target)
+
+    """This checks if user had locked the target in the past or not"""
+    if has_blocked(user["username"], block_target):
+        print('you already have blocked user with username: {}'.format(block_target))
+        return
+
+    block_user(user["username"], block_target)
+
+
+def friend_request_handler(result_array, user, friend_req_target):
     if not index_is_valid(friend_req_target, len(result_array)):
-        friend_request_handler(result_array, user)
+        friend_request_handler(result_array, user, friend_req_target)
         return
     friend_req_target = int(friend_req_target)
     friend_req_target -= 1
@@ -80,7 +125,12 @@ def friend_request_handler(result_array, user):
         return
 
     dest_ID = result_array[friend_req_target][0]
-
+    if has_blocked(user["username"], dest_ID):
+        print('you have blocked {} you have to unblock this user first'.format(dest_ID))
+        return
+    if has_blocked(dest_ID, user["username"]):
+        print('Since you have been blocked by {}, you cant send a friendship request to this user'.format(dest_ID))
+        return
     if is_friend(user["username"], dest_ID):
         print('You are already a friend of {}'.format(dest_ID))
         return

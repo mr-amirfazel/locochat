@@ -12,12 +12,14 @@ def index_is_digit(index):
 
 
 def index_in_border(index, length):
-    index = int(index)
-    index -= 1
+    if index.isdigit():
+        index = int(index)
+        index -= 1
 
-    if index < 0 or index >= length:
-        print(CliColors.FAIL + 'index out of border....' + CliColors.ENDC)
-        return False
-    return True
+        if index < 0 or index >= length:
+            print(CliColors.FAIL + 'index out of border....' + CliColors.ENDC)
+            return False
+        return True
+    return False
 
 
