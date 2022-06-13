@@ -2,7 +2,6 @@ from connect import *
 import time
 import datetime
 
-
 db = get_db()
 cursor = db.cursor()
 
@@ -45,6 +44,24 @@ def block_user(src, dst):
 
     except Exception as inst:
         print('2')
+        print(inst)
+        db.rollback()
+
+
+def get_blocked_users(src):
+    sql = """
+    select blocked_ID, blocked_at
+    from `blocked`
+    where blocker_ID = %s
+    """
+    val = (src,)
+    try:
+        cursor.execute(sql, val)
+        res = cursor.fetchall()
+        db.commit()
+        return res
+
+    except Exception as inst:
         print(inst)
         db.rollback()
 

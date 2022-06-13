@@ -38,7 +38,7 @@ def user_dash_board(user):
         elif user_input == '4':
             requests(user)
         elif user_input == '5':
-            pass
+            blocked_users(user)
         elif user_input == '6':
             log_out(user)
             break
@@ -47,6 +47,15 @@ def user_dash_board(user):
         else:
             print("you may have entered a wrong value")
 
+def blocked_users(user):
+    username = user["username"]
+    blocks = get_blocked_users(username)
+    if len(blocks) == 0:
+        print('YOU have no blocked user')
+        return
+    print('    ID\t\t Blocked_Date')
+    for ind, row in enumerate(blocks):
+        print('{}) {}\t{}'.format(ind + 1, row[0], row[1]))
 
 def display_friends(user):
     username = user["username"]
