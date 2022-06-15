@@ -1,0 +1,4 @@
+HELP NOTE:
+    you can send a friend request using keyword `frnd` along with the index you want to send request to
+    block a user using keyword `blck`along with the index you want to block
+    or close the section enter anything else

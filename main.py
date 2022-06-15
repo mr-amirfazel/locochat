@@ -1,3 +1,5 @@
+import getpass
+
 import menus
 from menus import *
 from store import store
@@ -14,6 +16,8 @@ from cli_assets.cli_colors import CliColors
 from query_handler.friend_request_utils import *
 from query_handler.friends_utils import *
 from query_handler.blocks_utils import *
+from validation.friend_req_validation import valid_friend_request
+from validation.block_req_validation import valid_block_request
 
 store = store()
 db = get_db()
@@ -47,6 +51,7 @@ def user_dash_board(user):
         else:
             print("you may have entered a wrong value")
 
+
 def blocked_users(user):
     username = user["username"]
     blocks = get_blocked_users(username)
@@ -56,6 +61,7 @@ def blocked_users(user):
     print('    ID\t\t Blocked_Date')
     for ind, row in enumerate(blocks):
         print('{}) {}\t{}'.format(ind + 1, row[0], row[1]))
+
 
 def display_friends(user):
     username = user["username"]
@@ -71,11 +77,7 @@ def search_handler(user):
     user_search_str = input("enter the username to be searched\n>")
     result_array = search(user_search_str)
     print_search_result(result_array, user)
-    # friend_request_handler(result_array, user)
-    print(""""HELP NOTE:
-    you can send a friend request using keyword `frnd` along with the index you want to send request to
-    block a user using keyword `blck`along with the index you want to block
-    or close the section enter anything else""")
+    menus.search_help_menu()
     user_input = input('enter your choice here:\n>')
     data_list = user_input.split(' ')
     cmd = data_list[0]
@@ -105,21 +107,10 @@ def block_user_handler(result_array, user, index):
         return
     index = int(index) - 1
 
-    if result_array[index][0] == user["username"]:
-        print(CliColors.FAIL + 'You cant block yourself... try again' + CliColors.ENDC)
-        return
-
     block_target = result_array[index][0]
 
-    if is_friend(user["username"], block_target):
-        remove_friends(user["username"], block_target)
-
-    """This checks if user had locked the target in the past or not"""
-    if has_blocked(user["username"], block_target):
-        print('you already have blocked user with username: {}'.format(block_target))
-        return
-
-    block_user(user["username"], block_target)
+    if valid_block_request(result_array, user, index):
+        block_user(user["username"], block_target)
 
 
 def friend_request_handler(result_array, user, friend_req_target):
@@ -129,27 +120,9 @@ def friend_request_handler(result_array, user, friend_req_target):
     friend_req_target = int(friend_req_target)
     friend_req_target -= 1
 
-    if result_array[friend_req_target][0] == user["username"]:
-        print(CliColors.FAIL + 'You cant send a request to yourself... try again' + CliColors.ENDC)
-        return
-
     dest_ID = result_array[friend_req_target][0]
-    if has_blocked(user["username"], dest_ID):
-        print('you have blocked {} you have to unblock this user first'.format(dest_ID))
-        return
-    if has_blocked(dest_ID, user["username"]):
-        print('Since you have been blocked by {}, you cant send a friendship request to this user'.format(dest_ID))
-        return
-    if is_friend(user["username"], dest_ID):
-        print('You are already a friend of {}'.format(dest_ID))
-        return
-    if request_exists(user["username"], dest_ID):
-        print('A request had already been sent to {}'.format(dest_ID))
-        return
-    if reverse_request(user["username"], dest_ID):
-        print('A request had already been sent from {} to you. You can go and accept it'.format(dest_ID))
-        return
-    send_request(user["username"], dest_ID)
+    if valid_friend_request(result_array, user, friend_req_target):
+        send_request(user["username"], dest_ID)
 
 
 def requests(user):
@@ -171,10 +144,7 @@ def user_sent_requests(username):
 def user_received_requests(username):
     result_array = received_requests(username)
     print_requests(result_array)
-    print(""""HELP NOTE:
-    you can accept a  request using keyword `acc` along with the index you want to accept
-    reject a request using keyword `rej`along with the index you want to reject
-    or close the section using keyword `ext`""")
+    menus.request_help_menu()
     user_input = input('enter your choice (dont forget to use spaces ;))\n>')
     input_splited = user_input.split(' ')
     command = input_splited[0]

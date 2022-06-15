@@ -114,6 +114,9 @@
 # # except Exception as inst:
 # #         print(inst)
 # #         db.rollback()
-smp = 'hi there'.split(' ')
-print(smp[0])
-print(smp[1])
+# smp = 'hi there'.split(' ')
+# print(smp[0])
+# print(smp[1])
+import getpass
+
+password = getpass.getpass(prompt='please enter your password: ')

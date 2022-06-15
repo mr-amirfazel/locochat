@@ -1,0 +1,4 @@
+HELP NOTE:
+    you can accept a  request using keyword `acc` along with the index you want to accept
+    reject a request using keyword `rej`along with the index you want to reject
+    or close the section using keyword `ext`
