@@ -119,4 +119,13 @@
 # print(smp[1])
 import getpass
 
-password = getpass.getpass(prompt='please enter your password: ')
+# password = getpass.getpass(prompt='please enter your password: ')
+# smp = "hi".split(' ')
+# print(smp[1] == '')
+# tkn = 'aaaa'
+# name ='abc'
+# age = 12
+# person = {tkn,name, age}
+# print()
+print('hi', end='')
+print('fazel')

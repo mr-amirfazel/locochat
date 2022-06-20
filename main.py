@@ -1,9 +1,6 @@
-import getpass
-
 import menus
 from menus import *
 from store import store
-from connect import *
 from validation.signup_validation import valid_user
 from validation.login_validation import valid_entry
 from validation.index_validation import index_is_valid
@@ -18,12 +15,10 @@ from query_handler.friends_utils import *
 from query_handler.blocks_utils import *
 from validation.friend_req_validation import valid_friend_request
 from validation.block_req_validation import valid_block_request
+from query_handler.db_users import *
+from query_handler.messages_utils import *
 
 store = store()
-db = get_db()
-cursor = db.cursor()
-store.db = db
-store.cursor = cursor
 
 
 def user_dash_board(user):
@@ -36,6 +31,7 @@ def user_dash_board(user):
             pass
         elif user_input == '2':
             display_friends(user)
+            chat_with_friend(user)
         elif user_input == '3':
             search_handler(user)
             pass
@@ -50,6 +46,71 @@ def user_dash_board(user):
             pass
         else:
             print("you may have entered a wrong value")
+
+
+def chat_with_friend(user):
+    # display_friends(user)
+    friends = get_friends(user["username"])
+    if len(friends) == 0:
+        return
+    menus.start_chat_help_menu()
+    user_choice = input('enter your choice\n>')
+    data_list = user_choice.split(' ')
+    cmd = data_list[0]
+    if not cmd == 'chat':
+        return
+    if not len(data_list) > 1:
+        return
+    if index_is_valid(data_list[1], len(friends)):
+        chat_contact = friends[int(data_list[1]) - 1][0]
+        chatroom(user["username"], chat_contact)
+
+
+def chatroom(src, dst):
+    menus.chat_help_menu()
+    while True:
+        display_messages(src, dst)
+        message_prompt()
+
+
+def display_messages(src, dst):
+    """TODO: make an interface for displaying messages as sketched """
+    src = get_user(src)
+    dst = get_user(dst)
+    messages = get_messages(src, dst)
+    if len(messages) == 0:
+        print('No messages found')
+        return
+    for index, message in enumerate(messages):
+        user_is_sender = message[3] == src["username"]
+        print('*' * 32)
+        print('{})'.format(index))
+        if user_is_sender:
+            print(CliColors.OKGREEN+'YOU: '+CliColors.ENDC, end='')
+        else:
+            print(message[3]+': ', end='')
+        print(message[5])
+        if user_is_sender:
+            end = '\t'
+        else:
+            end = '\n'
+        print('\n{}'.format(message[6]), end=end)
+        if user_is_sender:
+            if message[7] == '0':
+                print('not seen')
+            else:
+                print('seen')
+        print('*'*32)
+
+def get_messages(src, dst):
+    """TODO: get the messages from query handler and return them"""
+    chat_messages = get_messages(src, dst)
+    return chat_messages
+
+
+def message_prompt():
+    """TODO: user enters message here"""
+    pass
 
 
 def blocked_users(user):
@@ -68,7 +129,6 @@ def display_friends(user):
     friends = get_friends(username)
     if len(friends) == 0:
         print('YOU have no friends You are alone Get a life loser...')
-        return
     for ind, row in enumerate(friends):
         print('{}) {}'.format(ind + 1, row[0]))
 

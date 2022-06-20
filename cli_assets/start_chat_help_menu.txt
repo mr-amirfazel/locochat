@@ -1,0 +1,3 @@
+HELP NOTE:
+    you can chat with a friend using the keyword `chat` along with the index you want to send message to
+    and to  close the section enter anything else

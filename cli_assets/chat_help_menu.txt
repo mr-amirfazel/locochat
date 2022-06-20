@@ -1,0 +1,4 @@
+HELP NOTE:
+    you can send a message using the keyword `msg` alongside with your message text
+    like a message using the keyword `like` alongside with the index of the message you want to like
+    and to  close the section enter anything else
