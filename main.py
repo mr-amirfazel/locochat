@@ -70,11 +70,11 @@ def chatroom(src, dst):
     menus.chat_help_menu()
     while True:
         display_messages(src, dst)
-        message_prompt()
+        if message_prompt(src, dst) == 0:
+            return
 
 
 def display_messages(src, dst):
-    """TODO: make an interface for displaying messages as sketched """
     src = get_user(src)
     dst = get_user(dst)
     messages = get_messages(src, dst)
@@ -86,9 +86,9 @@ def display_messages(src, dst):
         print('*' * 32)
         print('{})'.format(index))
         if user_is_sender:
-            print(CliColors.OKGREEN+'YOU: '+CliColors.ENDC, end='')
+            print(CliColors.OKGREEN + 'YOU: ' + CliColors.ENDC, end='')
         else:
-            print(message[3]+': ', end='')
+            print(message[3] + ': ', end='')
         print(message[5])
         if user_is_sender:
             end = '\t'
@@ -96,22 +96,39 @@ def display_messages(src, dst):
             end = '\n'
         print('\n{}'.format(message[6]), end=end)
         if user_is_sender:
-            if message[7] == '0':
+            if message[7] == 0:
                 print('not seen')
             else:
                 print('seen')
-        print('*'*32)
+        print('*' * 32)
+
 
 def get_messages(src, dst):
-    """TODO: get the messages from query handler and return them"""
-    chat_messages = get_messages(src, dst)
+    chat_messages = get_chat(src, dst)
     return chat_messages
 
 
-def message_prompt():
-    """TODO: user enters message here"""
-    pass
-
+def message_prompt(src, dst):
+    src = get_user(src)
+    dst = get_user(dst)
+    chat_input = input('{}: '.format(src["username"]))
+    chat_data = chat_input.split(' ')
+    command = chat_data[0]
+    print(command)
+    if command != 'msg' and command != 'like':
+        return 0
+    if not len(chat_data) > 1:
+        print('not enough entries')
+        return 0
+    if command == 'like':
+        """TODO: get index, validate it, add to liked messages"""
+        pass
+    if command == 'msg':
+        if len(chat_data[1]) > 300:
+            print('message content should not be over 300 characters')
+            return 0
+        msg_content = ' '.join([str(item) for item in chat_data[1:]])
+        send_message(src, dst, msg_content)
 
 def blocked_users(user):
     username = user["username"]
