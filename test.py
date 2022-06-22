@@ -130,9 +130,13 @@ import getpass
 # splitt = 'hi I am fazel'.split(' ')
 # print(splitt)
 # tmp = splitt[1:]
-# string = ' '.join([str(item) for item in tmp])
-# print(string)
-cmd = 'msg'
-print(cmd == 'msg')
-print(cmd != 'cfd')
-print(not cmd == 'cfd')
+# # string = ' '.join([str(item) for item in tmp])
+# # print(string)
+# cmd = 'msg'
+# print(cmd == 'msg')
+# print(cmd != 'cfd')
+# print(not cmd == 'cfd')
+
+arr = [('hi',), ('ay',), ('yo',)]
+srm = ','.join(str(i[0]) for i in arr)
+print(srm)

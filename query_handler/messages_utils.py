@@ -94,5 +94,3 @@ def get_contacts(src):
         db.rollback()
 
 
-def like_message(src, message_id):
-    pass

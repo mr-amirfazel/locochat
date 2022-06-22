@@ -17,6 +17,7 @@ from validation.friend_req_validation import valid_friend_request
 from validation.block_req_validation import valid_block_request
 from query_handler.db_users import *
 from query_handler.messages_utils import *
+from query_handler.like_handler import *
 
 store = store()
 
@@ -79,8 +80,8 @@ def chatroom(src, dst):
     menus.chat_help_menu()
     while True:
         make_seen(src, dst)
-        display_messages(src, dst)
-        if message_prompt(src, dst) == 0:
+        messages = display_messages(src, dst)
+        if message_prompt(src, dst, messages) == 0:
             return
 
 def make_seen(src, dst):
@@ -99,8 +100,8 @@ def display_messages(src, dst):
         return
     for index, message in enumerate(messages):
         user_is_sender = message[3] == src["username"]
-        print('*' * 32)
-        print('{})'.format(index))
+        print(CliColors.WARNING+'*' * 32+CliColors.ENDC)
+        print('{})'.format(index+1))
         if user_is_sender:
             print(CliColors.OKGREEN + 'YOU: ' + CliColors.ENDC, end='')
         else:
@@ -116,7 +117,13 @@ def display_messages(src, dst):
                 print('not seen')
             else:
                 print('seen')
-        print('*' * 32)
+        likes = get_liked_by(message[0])
+        if not len(likes) == 0:
+            liked_users = ','.join(str(i[0]) for i in likes)
+            print('liked by: {}{}{}'.format(CliColors.FAIL, liked_users, CliColors.ENDC))
+        print(CliColors.OKBLUE+'*' * 32+CliColors.ENDC)
+
+    return messages
 
 
 def get_messages(src, dst):
@@ -124,7 +131,7 @@ def get_messages(src, dst):
     return chat_messages
 
 
-def message_prompt(src, dst):
+def message_prompt(src, dst, messages):
     src = get_user(src)
     dst = get_user(dst)
     chat_input = input('{}: '.format(src["username"]))
@@ -138,7 +145,13 @@ def message_prompt(src, dst):
         return 0
     if command == 'like':
         """TODO: get index, validate it, add to liked messages"""
-        pass
+        if not index_is_valid(chat_data[1], len(messages)):
+            return 0
+        liked_index = int(chat_data[1])-1
+        liked_message = messages[liked_index][0]
+        like_message(src["username"], liked_message)
+
+
     if command == 'msg':
         if len(chat_data[1]) > 300:
             print('message content should not be over 300 characters')
