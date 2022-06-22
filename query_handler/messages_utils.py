@@ -50,7 +50,6 @@ def make_seen_message(src, dst):
 
 
 def send_message(src, dst, message_content):
-    """TODO: adds messages to the messages table in database"""
     ts = time.time()
     msg_date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -73,7 +72,6 @@ def send_message(src, dst, message_content):
 
 
 def get_contacts(src):
-    """TODO: return a list of chats for a users"""
     sql = """
     SELECT distinct receiver_user_ID 
     FROM locochat.messages 
