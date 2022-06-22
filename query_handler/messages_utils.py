@@ -32,6 +32,23 @@ def get_chat(src, dst):
         db.rollback()
 
 
+def make_seen_message(src, dst):
+    sql = """
+    update messages
+    set seen = 1
+    where sender_token = %s and receiver_token = %s
+    """
+    val = (dst["token"], src["token"])
+
+    try:
+        cursor.execute(sql, val)
+        db.commit()
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
+
+
 def send_message(src, dst, message_content):
     """TODO: adds messages to the messages table in database"""
     ts = time.time()
@@ -49,6 +66,30 @@ def send_message(src, dst, message_content):
     try:
         cursor.execute(sql, val)
         db.commit()
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
+
+
+def get_contacts(src):
+    """TODO: return a list of chats for a users"""
+    sql = """
+    SELECT distinct receiver_user_ID 
+    FROM locochat.messages 
+    where sender_user_ID = %s
+    union
+    select distinct sender_user_ID
+    from locochat.messages
+    where receiver_user_ID = %s
+    """
+    val = (src["username"], src["username"])
+
+    try:
+        cursor.execute(sql, val)
+        res = cursor.fetchall()
+        db.commit()
+        return res
 
     except Exception as inst:
         print(inst)

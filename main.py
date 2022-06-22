@@ -28,7 +28,7 @@ def user_dash_board(user):
         menus.dash_board_menu()
         user_input = input("choose an option\n>").rstrip()
         if user_input == '1':
-            pass
+            show_chat_list(user)
         elif user_input == '2':
             display_friends(user)
             chat_with_friend(user)
@@ -46,6 +46,15 @@ def user_dash_board(user):
             pass
         else:
             print("you may have entered a wrong value")
+
+
+def show_chat_list(user):
+    chat_list = get_contacts(user)
+    if len(chat_list) == 0:
+        print('no chats found...')
+        return
+    for index, contact_user in enumerate(chat_list):
+        print('{ind}) {user}'.format(ind=index+1, user=contact_user[0]))
 
 
 def chat_with_friend(user):
@@ -69,9 +78,16 @@ def chat_with_friend(user):
 def chatroom(src, dst):
     menus.chat_help_menu()
     while True:
+        make_seen(src, dst)
         display_messages(src, dst)
         if message_prompt(src, dst) == 0:
             return
+
+def make_seen(src, dst):
+    """TODO: whenever you enter a chat, the senders messages are seen"""
+    src = get_user(src)
+    dst = get_user(dst)
+    make_seen_message(src, dst)
 
 
 def display_messages(src, dst):
@@ -129,6 +145,7 @@ def message_prompt(src, dst):
             return 0
         msg_content = ' '.join([str(item) for item in chat_data[1:]])
         send_message(src, dst, msg_content)
+
 
 def blocked_users(user):
     username = user["username"]
