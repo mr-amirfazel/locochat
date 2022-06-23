@@ -26,4 +26,4 @@ def check_login():
         print(inst)
         db.rollback()
 
-    log(TableTitles.LOGINS, 'checked wether there exist a user who never logged out')
+    log(TableTitles.LOGINS, 'checked whether there exist a user who never logged out')
