@@ -1,4 +1,6 @@
 from connect import *
+from logger import log
+from table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
@@ -24,3 +26,4 @@ def check_login():
         print(inst)
         db.rollback()
 
+    log(TableTitles.LOGINS, 'checked wether there exist a user who never logged out')

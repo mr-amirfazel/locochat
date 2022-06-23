@@ -3,6 +3,8 @@ from hashlib import sha256
 from connect import *
 import time
 import datetime
+from logger import log
+from table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
@@ -29,3 +31,5 @@ def log_in(user):
         print("not added to logins")
         print(inst)
         db.rollback()
+
+    log(TableTitles.LOGINS, 'user: {} logged in'.format(user))

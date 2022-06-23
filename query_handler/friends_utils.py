@@ -1,4 +1,6 @@
 from connect import *
+from logger import log
+from table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
@@ -23,6 +25,8 @@ def add_friends(username, friend_ID):
         print(inst)
         db.rollback()
 
+    log(TableTitles.FRIENDS, 'friendship made between user: {} and user: {}'.format(username, friend_ID))
+
 
 def get_friends(username):
     sql = """
@@ -42,6 +46,8 @@ def get_friends(username):
         print(inst)
         db.rollback()
 
+    log(TableTitles.FRIENDS, 'user: {} asked for a list of friends'.format(username))
+
 
 def remove_friends(src, dst):
     sql = """
@@ -59,3 +65,6 @@ def remove_friends(src, dst):
     except Exception as inst:
         print(inst)
         db.rollback()
+
+    log(TableTitles.FRIENDS, 'user: {} removed user: {} from its friends'.format(src, dst
+                                                                                 ))

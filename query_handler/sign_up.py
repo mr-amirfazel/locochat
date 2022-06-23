@@ -2,6 +2,8 @@ import secrets
 from hashlib import sha256
 from connect import *
 from query_handler.log_in import log_in
+from logger import log
+from table_titles import TableTitles as t
 
 db = get_db()
 cursor = db.cursor()
@@ -29,3 +31,5 @@ def sign_up(user):
         db.rollback()
 
     log_in(user)
+
+    log(t.USERS, 'new user with ID of {} was added to the app'.format(user["username"]))

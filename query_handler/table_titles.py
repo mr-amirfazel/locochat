@@ -1,0 +1,10 @@
+class TableTitles:
+    BLOCK = 'blocked'
+    FRIENDREQUESTS = 'friendrequests'
+    FRIENDS = 'friends'
+    LIKES = 'likes'
+    LOGIN_FAIL = 'login_failure'
+    LOGINS = 'logins'
+    MESSAGES = 'messages'
+    PASS_RET_FAIL = 'password_retreival_failure'
+    USERS = 'users'

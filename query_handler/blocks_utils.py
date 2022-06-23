@@ -1,9 +1,12 @@
 from connect import *
 import time
 import datetime
+from logger import log
 
 db = get_db()
 cursor = db.cursor()
+
+TABLENAME = 'blocked'
 
 
 def has_blocked(src, dst):
@@ -47,6 +50,8 @@ def block_user(src, dst):
         print(inst)
         db.rollback()
 
+    log(TABLENAME, '{} blocked {}'.format(src, dst))
+
 
 def get_blocked_users(src):
     sql = """
@@ -65,6 +70,24 @@ def get_blocked_users(src):
         print(inst)
         db.rollback()
 
+    log(TABLENAME, 'user: {} asked for its blocked users'.format(src))
+
 
 def remove_blocked(src, dst):
-    pass
+    sql = """
+    delete
+    from blocked
+    where blocker_ID = %s and blocked_ID = %s
+    """
+    val = (src, dst)
+
+    try:
+        cursor.execute(sql, val)
+        db.commit()
+        print('User removed from blocked list, successfully')
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
+
+    log(TABLENAME, '{} unblocked {}'.format(src, dst))

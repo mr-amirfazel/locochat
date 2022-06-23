@@ -1,5 +1,6 @@
 from connect import *
-
+from logger import log
+from table_titles import TableTitles as t
 
 db = get_db()
 cursor = db.cursor()
@@ -26,3 +27,4 @@ def search(searched_user):
         print(inst)
         db.rollback()
 
+    log(t.USERS, 'search for a user with ID like {} was made'.format(searched_user))

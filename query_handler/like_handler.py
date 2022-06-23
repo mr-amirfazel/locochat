@@ -1,4 +1,6 @@
 from connect import *
+from logger import log
+from table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
@@ -21,6 +23,9 @@ def like_message(src, message_id):
         print(inst)
         db.rollback()
 
+
+    log(TableTitles.LIKES, 'user: {} liked a message with ID of {}'.format(src, message_id))
+
 def get_liked_by(message_id):
     sql = """
     select liker_ID
@@ -38,3 +43,5 @@ def get_liked_by(message_id):
     except Exception as inst:
         print(inst)
         db.rollback()
+
+

@@ -1,6 +1,8 @@
 from connect import *
 import time
 import datetime
+from logger import log
+from table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
@@ -25,3 +27,6 @@ def log_out(user):
         print("error in logging out")
         print(inst)
         db.rollback()
+
+    log(TableTitles.LOGINS, 'user: {} logged out of the app'.format(user))
+

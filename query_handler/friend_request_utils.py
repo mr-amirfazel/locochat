@@ -1,5 +1,7 @@
 from query_handler.request_levels import RequestLevels
 from connect import *
+from logger import log
+from table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
@@ -63,6 +65,8 @@ def send_request(src, dst):
         print(inst)
         db.rollback()
 
+    log(TableTitles.FRIENDREQUESTS, '{} sent a friendship request to {}'.format(src, dst))
+
 
 def reverse_request(src, dst):
     sql = """
@@ -103,6 +107,8 @@ def received_requests(username):
         print(inst)
         db.rollback()
 
+    log(TableTitles.FRIENDREQUESTS, 'User {} checked for received friendship requests'.format(username))
+
 
 def sent_requests(username):
     sql = """
@@ -123,6 +129,8 @@ def sent_requests(username):
         print(inst)
         db.rollback()
 
+    log(TableTitles.FRIENDREQUESTS, 'User {} checked for send friendship requests'.format(username))
+
 
 def update_request(src, dst, situation):
     sql = """
@@ -140,3 +148,4 @@ def update_request(src, dst, situation):
         print(inst)
         db.rollback()
 
+    log(TableTitles.FRIENDREQUESTS, "user {} changed user {}'s request situation to {}".format(src, dst, situation))

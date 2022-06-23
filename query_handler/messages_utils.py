@@ -2,6 +2,8 @@ from connect import *
 import secrets
 import time
 import datetime
+from logger import log
+from table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
@@ -31,6 +33,8 @@ def get_chat(src, dst):
         print(inst)
         db.rollback()
 
+    log(TableTitles.MESSAGES, 'chats displayed between {} and {}'.format(src, dst))
+
 
 def make_seen_message(src, dst):
     sql = """
@@ -47,6 +51,8 @@ def make_seen_message(src, dst):
     except Exception as inst:
         print(inst)
         db.rollback()
+
+    log(TableTitles.MESSAGES, '{} has seen all {} new messages'.format(src, dst))
 
 
 def send_message(src, dst, message_content):
@@ -69,6 +75,8 @@ def send_message(src, dst, message_content):
     except Exception as inst:
         print(inst)
         db.rollback()
+
+    log(TableTitles.MESSAGES, '{} sent {} a message with content of {}'.format(src, dst, message_content))
 
 
 def get_contacts(src):
@@ -93,4 +101,4 @@ def get_contacts(src):
         print(inst)
         db.rollback()
 
-
+    log(TableTitles.MESSAGES, '{} asked for a list of chats'.format(src))
