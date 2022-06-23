@@ -95,7 +95,7 @@ def chatroom(src, dst):
     while True:
         make_seen(src, dst)
         messages = display_messages(src, dst)
-        command = message_prompt(src, dst, messages)
+        command = message_prompt(src, messages)
         if command["command"] == ChatCommands.CLOSE:
             return
         elif command["command"] == ChatCommands.LIKE:
@@ -147,7 +147,7 @@ def get_messages(src, dst):
     return chat_messages
 
 
-def message_prompt(src, dst, messages):
+def message_prompt(src, messages):
     chat_input = input('{}: '.format(src["username"]))
     chat_data = chat_input.split(' ')
     command = chat_data[0]
