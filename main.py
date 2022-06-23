@@ -18,6 +18,8 @@ from validation.block_req_validation import valid_block_request
 from query_handler.db_users import *
 from query_handler.messages_utils import *
 from query_handler.like_handler import *
+from chat_commands import ChatCommands
+from validation import send_message_validation
 
 store = store()
 
@@ -29,7 +31,7 @@ def user_dash_board(user):
         menus.dash_board_menu()
         user_input = input("choose an option\n>").rstrip()
         if user_input == '1':
-            show_chat_list(user)
+            chats_handler(user)
         elif user_input == '2':
             display_friends(user)
             chat_with_friend(user)
@@ -49,17 +51,27 @@ def user_dash_board(user):
             print("you may have entered a wrong value")
 
 
+def chats_handler(user):
+    chat_list = show_chat_list(user)
+    user_input = input(
+        CliColors.OKGREEN + 'To enter a chatroom enter the selected of index\nTo close enter anything else\n>' + CliColors.ENDC)
+    if not index_is_valid(user_input, len(chat_list)):
+        return
+    chatroom(get_user(user["username"]), get_user_by_token(chat_list[int(user_input) - 1][1]))
+
+
 def show_chat_list(user):
     chat_list = get_contacts(user)
     if len(chat_list) == 0:
         print('no chats found...')
         return
     for index, contact_user in enumerate(chat_list):
-        print('{ind}) {user}'.format(ind=index+1, user=contact_user[0]))
+        print('{ind}) {user}'.format(ind=index + 1, user=contact_user[0]))
+
+    return chat_list
 
 
 def chat_with_friend(user):
-    # display_friends(user)
     friends = get_friends(user["username"])
     if len(friends) == 0:
         return
@@ -73,7 +85,9 @@ def chat_with_friend(user):
         return
     if index_is_valid(data_list[1], len(friends)):
         chat_contact = friends[int(data_list[1]) - 1][0]
-        chatroom(user["username"], chat_contact)
+        src = get_user(user["username"])
+        dst = get_user(chat_contact)
+        chatroom(src, dst)
 
 
 def chatroom(src, dst):
@@ -81,27 +95,29 @@ def chatroom(src, dst):
     while True:
         make_seen(src, dst)
         messages = display_messages(src, dst)
-        if message_prompt(src, dst, messages) == 0:
+        command = message_prompt(src, dst, messages)
+        if command["command"] == ChatCommands.CLOSE:
             return
+        elif command["command"] == ChatCommands.LIKE:
+            like_message(src["username"], command["message"])
+        elif command["command"] == ChatCommands.SEND:
+            if send_message_validation.message_is_valid(src, dst, command["message"]):
+                send_message(src, dst, command["message"])
+
 
 def make_seen(src, dst):
-    """TODO: whenever you enter a chat, the senders messages are seen"""
-    src = get_user(src)
-    dst = get_user(dst)
     make_seen_message(src, dst)
 
 
 def display_messages(src, dst):
-    src = get_user(src)
-    dst = get_user(dst)
     messages = get_messages(src, dst)
     if len(messages) == 0:
         print('No messages found')
         return
     for index, message in enumerate(messages):
         user_is_sender = message[3] == src["username"]
-        print(CliColors.WARNING+'*' * 32+CliColors.ENDC)
-        print('{})'.format(index+1))
+        print(CliColors.WARNING + '*' * 32 + CliColors.ENDC)
+        print('{})'.format(index + 1))
         if user_is_sender:
             print(CliColors.OKGREEN + 'YOU: ' + CliColors.ENDC, end='')
         else:
@@ -121,7 +137,7 @@ def display_messages(src, dst):
         if not len(likes) == 0:
             liked_users = ','.join(str(i[0]) for i in likes)
             print('liked by: {}{}{}'.format(CliColors.FAIL, liked_users, CliColors.ENDC))
-        print(CliColors.OKBLUE+'*' * 32+CliColors.ENDC)
+        print(CliColors.OKBLUE + '*' * 32 + CliColors.ENDC)
 
     return messages
 
@@ -132,50 +148,62 @@ def get_messages(src, dst):
 
 
 def message_prompt(src, dst, messages):
-    src = get_user(src)
-    dst = get_user(dst)
     chat_input = input('{}: '.format(src["username"]))
     chat_data = chat_input.split(' ')
     command = chat_data[0]
     print(command)
     if command != 'msg' and command != 'like':
-        return 0
+        return {"command": ChatCommands.CLOSE}
     if not len(chat_data) > 1:
         print('not enough entries')
-        return 0
+        return {"command": ChatCommands.CLOSE}
     if command == 'like':
         """TODO: get index, validate it, add to liked messages"""
         if not index_is_valid(chat_data[1], len(messages)):
-            return 0
-        liked_index = int(chat_data[1])-1
+            return {"command": ChatCommands.CLOSE}
+        liked_index = int(chat_data[1]) - 1
         liked_message = messages[liked_index][0]
-        like_message(src["username"], liked_message)
-
+        return {"command": ChatCommands.LIKE,
+                "message": liked_message
+                }
 
     if command == 'msg':
-        if len(chat_data[1]) > 300:
-            print('message content should not be over 300 characters')
-            return 0
         msg_content = ' '.join([str(item) for item in chat_data[1:]])
-        send_message(src, dst, msg_content)
+        return {"command": ChatCommands.SEND,
+                "message": msg_content
+                }
 
 
-def blocked_users(user):
+def display_blocked_users(user):
     username = user["username"]
     blocks = get_blocked_users(username)
     if len(blocks) == 0:
         print('YOU have no blocked user')
-        return
+        return blocks
     print('    ID\t\t Blocked_Date')
     for ind, row in enumerate(blocks):
         print('{}) {}\t{}'.format(ind + 1, row[0], row[1]))
 
+    return blocks
+
+
+def blocked_users(user):
+    blocks = display_blocked_users(user)
+    if len(blocks) == 0:
+        return
+    user_inp = input(CliColors.OKGREEN+'If you wish to unblock any user enter the index of the user\nOtherwise enter anything but an index\n>'+CliColors.ENDC)
+    if index_is_valid(user_inp, len(blocks)):
+        index_to_remove = int(user_inp) - 1
+        remove_blocked(user["username"], blocks[index_to_remove][0])
+
+
 
 def display_friends(user):
+    print(CliColors.FAIL + 'Friends' + CliColors.ENDC)
     username = user["username"]
     friends = get_friends(username)
     if len(friends) == 0:
-        print('YOU have no friends You are alone Get a life loser...')
+        print('YOU have no friends\nYou are alone\nGet a life loser...')
     for ind, row in enumerate(friends):
         print('{}) {}'.format(ind + 1, row[0]))
 
@@ -183,7 +211,8 @@ def display_friends(user):
 def search_handler(user):
     user_search_str = input("enter the username to be searched\n>")
     result_array = search(user_search_str)
-    print_search_result(result_array, user)
+    if print_search_result(result_array, user) == 0:
+        return
     menus.search_help_menu()
     user_input = input('enter your choice here:\n>')
     data_list = user_input.split(' ')
@@ -199,7 +228,7 @@ def search_handler(user):
 def print_search_result(result_array, user):
     if len(result_array) == 0:
         print("no such user found")
-        return
+        return 0
     print("search results:")
     for i, t in enumerate(result_array):
         if t[0] == user["username"]:

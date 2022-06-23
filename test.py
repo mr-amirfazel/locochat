@@ -136,7 +136,13 @@ import getpass
 # print(cmd == 'msg')
 # print(cmd != 'cfd')
 # print(not cmd == 'cfd')
-
-arr = [('hi',), ('ay',), ('yo',)]
-srm = ','.join(str(i[0]) for i in arr)
-print(srm)
+#
+# arr = [('hi',), ('ay',), ('yo',)]
+# srm = ','.join(str(i[0]) for i in arr)
+# print(srm)
+test = ''
+test2 = '            '
+print(len(test))
+print(len(test2))
+print(len(test.rstrip()))
+print(len(test2.rstrip()))

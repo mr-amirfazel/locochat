@@ -73,11 +73,11 @@ def send_message(src, dst, message_content):
 
 def get_contacts(src):
     sql = """
-    SELECT distinct receiver_user_ID 
+    SELECT distinct receiver_user_ID, receiver_token 
     FROM locochat.messages 
     where sender_user_ID = %s
     union
-    select distinct sender_user_ID
+    select distinct sender_user_ID, sender_token
     from locochat.messages
     where receiver_user_ID = %s
     """

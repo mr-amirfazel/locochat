@@ -10,7 +10,7 @@ def get_user(username):
     from `users`
     where userID = %s
     """
-    val = (username, )
+    val = (username,)
 
     try:
         cursor.execute(sql, val)
@@ -26,3 +26,25 @@ def get_user(username):
         print(inst)
         db.rollback()
 
+
+def get_user_by_token(token):
+    sql = """
+        select userID
+        from `users`
+        where token = %s
+        """
+    val = (token,)
+
+    try:
+        cursor.execute(sql, val)
+        res = cursor.fetchall()
+        user = {
+            "token": token,
+            "username": res[0][0]
+        }
+        db.commit()
+        return user
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
