@@ -140,9 +140,41 @@ import getpass
 # arr = [('hi',), ('ay',), ('yo',)]
 # srm = ','.join(str(i[0]) for i in arr)
 # print(srm)
-test = ''
-test2 = '            '
-print(len(test))
-print(len(test2))
-print(len(test.rstrip()))
-print(len(test2.rstrip()))
+# test = ''
+# test2 = '            '
+# print(len(test))
+# print(len(test2))
+# print(len(test.rstrip()))
+# print(len(test2.rstrip()))
+
+from connect import *
+db = get_db()
+cursor = db.cursor()
+sql = """
+        select userID
+        from `users`
+        where token = %s
+        """
+token = '533aa8e389352d70060d58baa7055c0941447b5eac0be82890'
+val = (token,)
+
+try:
+        cursor.execute(sql, val)
+        res = cursor.fetchall()
+        print(res)
+        if len(res) == 0:
+            print('arrrrrrrrrr')
+            username = None
+        else:
+            username = res[0][0]
+        user = {
+            "token": token,
+            "username": username
+        }
+
+        print(user)
+        db.commit()
+
+except Exception as inst:
+        print(inst)
+        db.rollback()

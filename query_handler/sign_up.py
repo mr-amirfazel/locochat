@@ -2,8 +2,8 @@ import secrets
 from hashlib import sha256
 from connect import *
 from query_handler.log_in import log_in
-from logger import log
-from table_titles import TableTitles as t
+from query_handler.logger import log
+from query_handler.table_titles import TableTitles as t
 
 db = get_db()
 cursor = db.cursor()

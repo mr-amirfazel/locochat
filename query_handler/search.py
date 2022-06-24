@@ -1,6 +1,6 @@
 from connect import *
-from logger import log
-from table_titles import TableTitles as t
+from query_handler.logger import log
+from query_handler.table_titles import TableTitles as t
 
 db = get_db()
 cursor = db.cursor()

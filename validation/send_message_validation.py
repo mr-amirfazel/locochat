@@ -21,3 +21,4 @@ def message_is_valid(src, dst, message_content):
     if len(message_content) > 300:
         print('message content should not be over 300 characters')
         return False
+    return True

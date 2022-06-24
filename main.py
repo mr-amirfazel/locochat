@@ -20,6 +20,7 @@ from query_handler.messages_utils import *
 from query_handler.like_handler import *
 from chat_commands import ChatCommands
 from validation import send_message_validation
+from query_handler.delete_account_utils import *
 
 store = store()
 
@@ -46,13 +47,21 @@ def user_dash_board(user):
             log_out(user)
             break
         elif user_input == '7':
-            pass
+            delete_account_ability(user)
         else:
             print("you may have entered a wrong value")
 
 
+def delete_account_ability(user):
+    last_chance = input('Are you really sure to delete your account?\n1) Yes\n2)NO\n>')
+    if not int(last_chance) == 1:
+        return
+    remove_user(user["username"])
+
+
 def chats_handler(user):
     chat_list = show_chat_list(user)
+    print(chat_list)
     user_input = input(
         CliColors.OKGREEN + 'To enter a chatroom enter the selected of index\nTo close enter anything else\n>' + CliColors.ENDC)
     if not index_is_valid(user_input, len(chat_list)):
@@ -66,7 +75,10 @@ def show_chat_list(user):
         print('no chats found...')
         return
     for index, contact_user in enumerate(chat_list):
-        print('{ind}) {user}'.format(ind=index + 1, user=contact_user[0]))
+        if contact_user[0] is None:
+            print('{ind}) Deleted Account'.format(ind=index + 1))
+        else:
+            print('{ind}) {user}'.format(ind=index + 1, user=contact_user[0]))
 
     return chat_list
 
@@ -121,7 +133,10 @@ def display_messages(src, dst):
         if user_is_sender:
             print(CliColors.OKGREEN + 'YOU: ' + CliColors.ENDC, end='')
         else:
-            print(message[3] + ': ', end='')
+            if not message[3] is None:
+                print(message[3] + ': ', end='')
+            else:
+                print('Deleted Account : ', end='')
         print(message[5])
         if user_is_sender:
             end = '\t'
@@ -151,7 +166,6 @@ def message_prompt(src, messages):
     chat_input = input('{}: '.format(src["username"]))
     chat_data = chat_input.split(' ')
     command = chat_data[0]
-    print(command)
     if command != 'msg' and command != 'like':
         return {"command": ChatCommands.CLOSE}
     if not len(chat_data) > 1:
@@ -191,11 +205,11 @@ def blocked_users(user):
     blocks = display_blocked_users(user)
     if len(blocks) == 0:
         return
-    user_inp = input(CliColors.OKGREEN+'If you wish to unblock any user enter the index of the user\nOtherwise enter anything but an index\n>'+CliColors.ENDC)
+    user_inp = input(
+        CliColors.OKGREEN + 'If you wish to unblock any user enter the index of the user\nOtherwise enter anything but an index\n>' + CliColors.ENDC)
     if index_is_valid(user_inp, len(blocks)):
         index_to_remove = int(user_inp) - 1
         remove_blocked(user["username"], blocks[index_to_remove][0])
-
 
 
 def display_friends(user):
@@ -361,7 +375,7 @@ def login():
         "username": username,
         "password": password
     }
-    user_validity = valid_entry(user, cursor)
+    user_validity = valid_entry(user)
     if user_validity:
         log_in(user)
         user_dash_board(user)

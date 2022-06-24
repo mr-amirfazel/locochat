@@ -38,9 +38,13 @@ def get_user_by_token(token):
     try:
         cursor.execute(sql, val)
         res = cursor.fetchall()
+        if len(res) == 0:
+            username = None
+        else:
+            username = res[0][0]
         user = {
             "token": token,
-            "username": res[0][0]
+            "username": username
         }
         db.commit()
         return user

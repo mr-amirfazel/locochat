@@ -3,8 +3,8 @@ from hashlib import sha256
 from connect import *
 import time
 import datetime
-from logger import log
-from table_titles import TableTitles
+from query_handler.logger import log
+from query_handler.table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()

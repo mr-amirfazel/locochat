@@ -1,23 +1,27 @@
 from store import store
 import hashlib
+from connect import *
+
+db = get_db()
+cursor = db.cursor()
 
 store = store()
 
 
-def valid_entry(user, cursor):
+def valid_entry(user):
     store.login_error_message = ''
-    return user_existence(user, cursor) and password_match(user, cursor)
+    return user_existence(user) and password_match(user)
 
 
-def user_existence(user, cursor):
-    if user_exists(user, cursor):
+def user_existence(user):
+    if user_exists(user):
         return True
     else:
         store.login_error_message = store.login_error_message + 'User does not exist in database\n'
         return False
 
 
-def user_exists(user, cursor):
+def user_exists(user):
     username = user['username']
     username = str(username)
     query = """
@@ -33,7 +37,7 @@ def user_exists(user, cursor):
     return False
 
 
-def password_match(user, cursor):
+def password_match(user):
     username = user['username']
     password = user['password']
 

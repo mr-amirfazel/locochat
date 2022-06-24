@@ -2,8 +2,8 @@ from connect import *
 import secrets
 import time
 import datetime
-from logger import log
-from table_titles import TableTitles
+from query_handler.logger import log
+from query_handler.table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()

@@ -1,7 +1,7 @@
 from query_handler.request_levels import RequestLevels
 from connect import *
-from logger import log
-from table_titles import TableTitles
+from query_handler.logger import log
+from query_handler.table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()

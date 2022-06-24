@@ -1,12 +1,12 @@
 from connect import *
 import time
 import datetime
-from logger import log
+from query_handler.logger import log
+from query_handler.table_titles import TableTitles
 
 db = get_db()
 cursor = db.cursor()
 
-TABLENAME = 'blocked'
 
 
 def has_blocked(src, dst):
@@ -50,7 +50,7 @@ def block_user(src, dst):
         print(inst)
         db.rollback()
 
-    log(TABLENAME, '{} blocked {}'.format(src, dst))
+    log(TableTitles.BLOCK, '{} blocked {}'.format(src, dst))
 
 
 def get_blocked_users(src):
@@ -70,7 +70,7 @@ def get_blocked_users(src):
         print(inst)
         db.rollback()
 
-    log(TABLENAME, 'user: {} asked for its blocked users'.format(src))
+    log(TableTitles.BLOCK, 'user: {} asked for its blocked users'.format(src))
 
 
 def remove_blocked(src, dst):
@@ -90,4 +90,4 @@ def remove_blocked(src, dst):
         print(inst)
         db.rollback()
 
-    log(TABLENAME, '{} unblocked {}'.format(src, dst))
+    log(TableTitles.BLOCK, '{} unblocked {}'.format(src, dst))
