@@ -8,11 +8,11 @@ db = get_db()
 cursor = db.cursor()
 
 
-def init_false_try_login(user):
+def init_forget_pass(user):
 
     sql = """
-    insert into  `login_failure`
-    (ID)
+    insert into  `password_retreival_failure`
+    (user_ID)
     values
     (%s)
     """
@@ -27,35 +27,35 @@ def init_false_try_login(user):
         db.rollback()
 
 
-def insert_false_try(user):
+def insert_false_color(user):
     fail_count = get_number_of_false_entries(user)
-    if fail_count < 2:
+    if fail_count < 4:
         sql = """
-        update `login_failure`
+        update `password_retreival_failure`
         set failure_count = %s
-        where ID = %s
+        where user_ID = %s
         """
         val = (fail_count + 1, user["username"])
         execute_query(sql, val)
         log(t.LOGIN_FAIL, '{} entered wrong password'.format(user["username"]))
-    elif fail_count == 2:
+    elif fail_count == 4:
         ts = time.time()
         sus_begin = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         ftr = datetime.datetime.fromtimestamp(ts) + datetime.timedelta(days=1)
         sus_end = ftr.strftime('%Y-%m-%d %H:%M:%S')
         sql = """
-                update `login_failure`
+                update `password_retreival_failure`
                 set failure_count = %s, suspend_begin= %s, suspend_end=%s
-                where ID = %s
+                where user_ID = %s
                 """
         val = (fail_count + 1, sus_begin, sus_end, user["username"])
         execute_query(sql, val)
         log(t.LOGIN_FAIL, '{} entered wrong password and got suspended untill {}'.format(user["username"], sus_end))
-    elif fail_count == 3:
+    elif fail_count == 5:
         sql = """
-                        update `login_failure`
+                        update `password_retreival_failure`
                         set failure_count = %s, suspend_begin= %s, suspend_end=%s
-                        where ID = %s
+                        where user_ID = %s
                         """
         val = (1, None, None, user["username"])
         execute_query(sql, val)
@@ -75,8 +75,8 @@ def execute_query(sql, val):
 def get_number_of_false_entries(user):
     sql = """
     select failure_count
-    from `login_failure`
-    where ID = %s
+    from `password_retreival_failure`
+    where user_ID = %s
     """
     val = (user["username"],)
 
@@ -91,14 +91,14 @@ def get_number_of_false_entries(user):
         db.rollback()
 
 
-def is_login_suspend(user):
+def is_pass_ret_suspend(user):
     ts = time.time()
     now = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
     sql = """
     select failure_count, suspend_end
-    from `login_failure`
-    where ID = %s
+    from `password_retreival_failure`
+    where user_ID = %s
     """
     val = (user["username"], )
 
@@ -107,18 +107,18 @@ def is_login_suspend(user):
         res = cursor.fetchall()
         db.commit()
 
-        return int(res[0][0]) == 3 and now < str(res[0][1])
+        return int(res[0][0]) == 5 and now < str(res[0][1])
 
     except Exception as inst:
         print(inst)
         db.rollback()
 
 
-def get_login_suspend_time(user):
+def get_pass_ret_suspend_time(user):
     sql = """
     select suspend_end
-    from `login_failure`
-    where ID = %s
+    from `password_retreival_failure`
+    where user_ID = %s
     """
     val = (user["username"], )
 

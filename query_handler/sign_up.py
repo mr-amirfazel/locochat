@@ -5,6 +5,7 @@ from query_handler.log_in import log_in
 from query_handler.logger import log
 from query_handler.table_titles import TableTitles as t
 from query_handler.user_limitation_utils import init_false_try_login as init
+from query_handler.password_retreival_failure import init_forget_pass as pass_init
 
 db = get_db()
 cursor = db.cursor()
@@ -32,6 +33,7 @@ def sign_up(user):
         db.rollback()
 
     init(user)
+    pass_init(user)
 
     log_in(user)
 

@@ -22,6 +22,7 @@ from chat_commands import ChatCommands
 from validation import send_message_validation
 from query_handler.delete_account_utils import *
 from query_handler.user_limitation_utils import *
+from query_handler.password_retreival_failure import *
 
 store = store()
 
@@ -398,6 +399,26 @@ def wrong_password_handler(user):
     insert_false_try(user)
 
 
+def forget_password_handler():
+    user_username = input('please enter your your username\n>')
+    user = {"username": user_username}
+    if is_pass_ret_suspend(user):
+        print('You are suspended to retrieve and change password until {}'.format(get_pass_ret_suspend_time(user)))
+        return
+    if not user_exists(user_username):
+        print('This user doesnt even exist in app database')
+        return
+    user_fav_color = get_fav_color(user_username)
+    fav_color = input('What is your favorite color?\n>')
+    if fav_color.lower() == user_fav_color:
+        new_pass = input('Please enter new password\n>')
+        change_password(user_username, new_pass)
+    else:
+        print(CliColors.FAIL+'Incorrect Try again'+CliColors.ENDC)
+        insert_false_color(user)
+        return
+
+
 if __name__ == "__main__":
     welcome_text()
     count, user = check_login()
@@ -411,6 +432,8 @@ if __name__ == "__main__":
         elif user_choice == '2':
             login()
         elif user_choice == '3':
+            forget_password_handler()
+        elif user_choice == '4':
             break
         else:
             print("you may have entered some wrong values")
