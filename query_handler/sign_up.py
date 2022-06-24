@@ -4,6 +4,7 @@ from connect import *
 from query_handler.log_in import log_in
 from query_handler.logger import log
 from query_handler.table_titles import TableTitles as t
+from query_handler.user_limitation_utils import init_false_try_login as init
 
 db = get_db()
 cursor = db.cursor()
@@ -29,6 +30,8 @@ def sign_up(user):
         print("not added")
         print(inst)
         db.rollback()
+
+    init(user)
 
     log_in(user)
 

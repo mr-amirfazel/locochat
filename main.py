@@ -21,6 +21,7 @@ from query_handler.like_handler import *
 from chat_commands import ChatCommands
 from validation import send_message_validation
 from query_handler.delete_account_utils import *
+from query_handler.user_limitation_utils import *
 
 store = store()
 
@@ -375,15 +376,26 @@ def login():
         "username": username,
         "password": password
     }
+
+    if is_login_suspend(user):
+        print('You are suspended until {}'.format(get_login_suspend_time(user)))
+        return
+
     user_validity = valid_entry(user)
-    if user_validity:
+    if user_validity["validity"]:
         log_in(user)
         user_dash_board(user)
+
     else:
-        print(user_validity)
-        print(store.login_error_message)
+        print(user_validity["message"])
+        if user_validity["error"] == 'WrongPass':
+            wrong_password_handler(user)
 
         login()
+
+
+def wrong_password_handler(user):
+    insert_false_try(user)
 
 
 if __name__ == "__main__":

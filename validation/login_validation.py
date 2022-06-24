@@ -9,15 +9,25 @@ store = store()
 
 
 def valid_entry(user):
-    store.login_error_message = ''
-    return user_existence(user) and password_match(user)
+    if not user_existence(user):
+        return {
+            "validity": False,
+            "error": 'UserNotExist',
+            "message": 'this username does not exist in database'
+        }
+    if not password_match(user):
+        return {
+            "validity": False,
+            "error": 'WrongPass',
+            "message": 'password is incorrect'
+        }
+    return {"validity": True}
 
 
 def user_existence(user):
     if user_exists(user):
         return True
     else:
-        store.login_error_message = store.login_error_message + 'User does not exist in database\n'
         return False
 
 
@@ -28,8 +38,14 @@ def user_exists(user):
     select userID
     from users
     """
-    cursor.execute(query)
-    result = cursor.fetchall()
+    result = []
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        db.commit()
+    except Exception as inst:
+        print(inst)
+        db.rollback()
 
     for row in result:
         if username in row:
@@ -45,11 +61,17 @@ def password_match(user):
     select userID, password_hashed
     from users 
     """
-    cursor.execute(sql)
-    result = cursor.fetchall()
+    result = []
+    try:
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        db.commit()
+
+    except Exception as inst:
+        print(inst)
+        db.rollback()
 
     for row in result:
         if row[0] == username and row[1] == hashlib.sha256(password.encode('utf-8')).hexdigest():
             return True
-    store.login_error_message = store.login_error_message + 'password doesnt match'
     return False

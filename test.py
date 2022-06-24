@@ -146,35 +146,57 @@ import getpass
 # print(len(test2))
 # print(len(test.rstrip()))
 # print(len(test2.rstrip()))
+#
+# from connect import *
+# db = get_db()
+# cursor = db.cursor()
+# sql = """
+#         select userID
+#         from `users`
+#         where token = %s
+#         """
+# token = '533aa8e389352d70060d58baa7055c0941447b5eac0be82890'
+# val = (token,)
+#
+# try:
+#         cursor.execute(sql, val)
+#         res = cursor.fetchall()
+#         print(res)
+#         if len(res) == 0:
+#             print('arrrrrrrrrr')
+#             username = None
+#         else:
+#             username = res[0][0]
+#         user = {
+#             "token": token,
+#             "username": username
+#         }
+#
+#         print(user)
+#         db.commit()
+#
+# except Exception as inst:
+#         print(inst)
+#         db.rollback()
 
-from connect import *
-db = get_db()
-cursor = db.cursor()
-sql = """
-        select userID
-        from `users`
-        where token = %s
-        """
-token = '533aa8e389352d70060d58baa7055c0941447b5eac0be82890'
-val = (token,)
+import time
+import datetime
 
-try:
-        cursor.execute(sql, val)
-        res = cursor.fetchall()
-        print(res)
-        if len(res) == 0:
-            print('arrrrrrrrrr')
-            username = None
-        else:
-            username = res[0][0]
-        user = {
-            "token": token,
-            "username": username
-        }
+ts = time.time()
+timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+ftr = datetime.datetime.fromtimestamp(ts) + datetime.timedelta(days=5)
+future = ftr.strftime('%Y-%m-%d %H:%M:%S')
+print(future)
+print(timestamp)
 
-        print(user)
-        db.commit()
 
-except Exception as inst:
-        print(inst)
-        db.rollback()
+current_datetime = datetime.datetime.utcnow()
+
+future_datetime = current_datetime + datetime.timedelta(minutes=5)
+# future_datetime = future_datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+print(timestamp < future)
+# user = {
+#     "ID": 'pepoo'
+# }
+# print(user["ID"])
+# print(user[0])
