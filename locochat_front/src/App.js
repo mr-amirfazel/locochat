@@ -1,12 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
+import NavBar from './hoc/navBar/Navbar'
+import React from "react";
+import {  BrowserRouter as Router, Routes ,Route } from 'react-router-dom';
+import Welcome from './layouts/welcome/Welcome'
 
 function App() {
   return (
-    <div className="App">
-     nigger
-    </div>
-  );
+    <>  
+     <NavBar />
+     <Welcome />
+     </>
+  )
 }
 
 export default App;

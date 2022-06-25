@@ -1,0 +1,72 @@
+.navBar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: var(--navbar-length);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--navbar-color);
+  font-family: "Estedad";
+  color: var(--text-color);
+  --left-margin: 1vw;
+  --logo-size: 160px;
+}
+
+.navBar img {
+  width: 70px;
+  margin-right: 3rem;
+  margin-left: 2.2rem;
+  padding: 5px;
+}
+
+.navBarr img {
+  width: var(--logo-size);
+  margin-right: 3rem;
+  position: absolute;
+  top: calc((var(--navbar-length) / 2) - 4vh);
+  padding: 1.3rem;
+  z-index: 1;
+  left: var(--left-margin);
+}
+
+.logoBalck {
+  position: absolute;
+  top: calc((var(--navbar-length) / 2) - 5.5vh);
+  left: calc(var(--left-margin) - 1.7vw);
+  border-radius: 50%;
+  width: var(--logo-size);
+  height: var(--logo-size);
+  z-index: 0;
+  background-color: var(--navbar-color);
+}
+
+.devider {
+  border-right: 2px solid var(--text-color);
+  border-radius: 50%;
+}
+
+.navBar span p {
+  display: inline-block;
+}
+.navBar p {
+  text-decoration: none;
+  color: var(--text-color);
+  margin: 0px 2rem;
+  font-size: 1.4rem;
+}
+
+.navBar .leftttttSpan {
+  margin-left: calc(var(--logo-size) + var(--left-margin) + 2rem);
+}
+
+.button
+{
+  width: 100%;
+  background-color: transparent;
+  font-weight: 2rem;
+  border:transparent !important;
+  color: var(--text-color);
+  display: inline-block;
+}
