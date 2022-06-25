@@ -10,7 +10,7 @@
   
   .modal {
     position: fixed;
-    top: 13vh;
+    top: 8vh;
     left: 10%;
     width: 80%;
     z-index: 100;
@@ -27,11 +27,11 @@
     color: white;
   }
   
-  .content {
+  .content form {
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; ;
+    align-items: flex-start; 
   }
   .content input {
     width: 100%;
