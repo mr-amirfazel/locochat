@@ -72,11 +72,17 @@ def phone_number_exists(user):
     from users
     where phone_number = {phone_number}
     """.format(phone_number=number)
-    cursor.execute(query)
-    if cursor.rowcount != 0:
-        store.signup_error_message = store.signup_error_message + 'there is an account with this phone number\n'
-        return True
-    return False
+    try:
+        cursor.execute(query)
+        res = cursor.fetchall()
+        db.commit()
+        if len(res) != 0:
+            store.signup_error_message = store.signup_error_message + 'there is an account with this phone number\n'
+            return True
+        return False
+    except Exception as inst:
+        print(inst)
+        db.rollback()
 
 
 def valid_mail(user):
@@ -98,14 +104,17 @@ def email_exists(user):
     select email
     from users
     """
-
-    cursor.execute(query)
-    result = cursor.fetchall()
-
-    for row in result:
-        if email in row:
-            return True
-    return False
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        db.commit()
+        for row in result:
+            if email in row:
+                return True
+        return False
+    except Exception as inst:
+        print(inst)
+        db.rollback()
 
 
 def valid_ID(user):
@@ -132,13 +141,18 @@ def user_exists(user):
     select userID
     from users
     """
-    cursor.execute(query)
-    result = cursor.fetchall()
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        db.commit()
+        for row in result:
+            if username in row:
+                return True
+        return False
 
-    for row in result:
-        if username in row:
-            return True
-    return False
+    except Exception as inst:
+        print(inst)
+        db.rollback()
 
 
 def valid_question_answer(user):
