@@ -2,10 +2,12 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 import validation.signup_validation
+from validation import login_validation
 from store import store
 from validation import *
 from validation import signup_validation
 from query_handler import sign_up
+from query_handler.log_in import log_in
 
 Store = store()
 
@@ -27,6 +29,24 @@ def signup():
     response = {
         'message': 'failed to sign up',
         'error': Store.signup_error_message
+    }
+    return jsonify(response), 400
+
+
+@web_app.route('/login', methods=['POST'])
+def login():
+    values = request.get_json()
+    print(values)
+    validity = login_validation.valid_entry(values)
+    if validity["validity"]:
+        log_in(values)
+        response = {
+            'message': 'user logged in successfully'
+        }
+        return jsonify(response), 200
+    response = {
+        'message': 'failed to login',
+        'error': validity["message"]
     }
     return jsonify(response), 400
 
