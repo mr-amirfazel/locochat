@@ -1,9 +1,12 @@
 import classes from './LogInModal.module.css';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import AuthContext from '../../store/auth-context';
 
 
 
 export default function SignUpModal(props){
+
+  const ctx = useContext(AuthContext)
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -50,6 +53,7 @@ const submitHandler = (event) => {
       response.json().then(data => {
          alert(data.message)
          props.onClose();
+         ctx.onLogin(username, password);
       })
    }
    else if (response.status === 400){
