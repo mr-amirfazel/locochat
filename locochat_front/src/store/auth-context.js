@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 const AuthContext = React.createContext({
-  isLoggedIn: false,
+    username: '',
+    isLoggedIn: false,
   onLogout: () => {},
-  onLogin: (username, password) => {}
+  onLogin: (username) => {}
 });
 
 export const AuthContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState(null)
 
   useEffect(() => {
     const storedUserLoggedInInformation = localStorage.getItem('isLoggedIn');
@@ -17,14 +19,40 @@ export const AuthContextProvider = (props) => {
     }
   }, []);
 
+  const logOutFetch = () => {
+    fetch("http://localhost:5000/logout", {
+     
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+        }),
+         
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+    .then(response => {
+       console.log(response)
+       if (response.status === 200){
+          response.json().then(data => {
+             alert(data.message)
+          })
+       }
+      
+    })
+
+  }
+
   const logoutHandler = () => {
     localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
+    logOutFetch();
   };
 
-  const loginHandler = () => {
+  const loginHandler = (ID) => {
     localStorage.setItem('isLoggedIn', '1');
     setIsLoggedIn(true);
+    setUsername(ID);
   };
 
   return (

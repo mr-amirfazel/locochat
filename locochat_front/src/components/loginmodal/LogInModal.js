@@ -53,7 +53,7 @@ const submitHandler = (event) => {
       response.json().then(data => {
          alert(data.message)
          props.onClose();
-         ctx.onLogin(username, password);
+         ctx.onLogin(username);
       })
    }
    else if (response.status === 400){

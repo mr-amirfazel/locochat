@@ -8,6 +8,7 @@ from validation import *
 from validation import signup_validation
 from query_handler import sign_up
 from query_handler.log_in import log_in
+from query_handler.log_out import log_out
 
 Store = store()
 
@@ -49,6 +50,16 @@ def login():
         'error': validity["message"]
     }
     return jsonify(response), 400
+
+
+@web_app.route('/logout', methods=['POST'])
+def logout():
+    values = request.get_json()
+    log_out(values)
+    response = {
+        'message': 'Logged out'
+    }
+    return  jsonify(response), 200
 
 
 if __name__ == '__main__':
