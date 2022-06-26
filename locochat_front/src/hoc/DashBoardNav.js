@@ -47,8 +47,13 @@ export default function DashBoardNav () {
   <p>
   <button className={`${styleModule.button}`}>Delete Account</button>
   </p>
+
+  
  
 </span>
+<p className={`${styleModule.username}`}>
+    {ctx.username}
+  </p>
 </div>
 
     );

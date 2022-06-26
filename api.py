@@ -60,7 +60,8 @@ def logout():
     response = {
         'message': 'Logged out'
     }
-    return  jsonify(response), 200
+    return jsonify(response), 200
+
 
 @web_app.route('/logged_user', methods=['GET'])
 def logged_in_user():

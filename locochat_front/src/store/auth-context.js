@@ -9,7 +9,7 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState(null)
+  const [username, setUsername] = useState('')
 
   useEffect(() => {
     const storedUserLoggedInInformation = localStorage.getItem('isLoggedIn');
@@ -25,6 +25,7 @@ export const AuthContextProvider = (props) => {
        console.log(response)
        if (response.status === 200){
           response.json().then(data => {
+            console.log(data.username)
              setIsLoggedIn(true);
              setUsername(data.username)
           })
@@ -79,6 +80,7 @@ export const AuthContextProvider = (props) => {
   return (
     <AuthContext.Provider
       value={{
+        username: username,
         isLoggedIn: isLoggedIn,
         onLogout: logoutHandler,
         onLogin: loginHandler,
