@@ -9,6 +9,7 @@ from validation import signup_validation
 from query_handler import sign_up
 from query_handler.log_in import log_in
 from query_handler.log_out import log_out
+from query_handler.logged_in_user import check_login
 
 Store = store()
 
@@ -60,6 +61,19 @@ def logout():
         'message': 'Logged out'
     }
     return  jsonify(response), 200
+
+@web_app.route('/logged_user', methods=['GET'])
+def logged_in_user():
+    count, user = check_login()
+    if count:
+        response = {
+            'username': user["username"]
+        }
+        return response, 200
+    response = {
+        'message': 'no user is logged in'
+    }
+    return response, 400
 
 
 if __name__ == '__main__':

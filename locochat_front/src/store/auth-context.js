@@ -13,11 +13,32 @@ export const AuthContextProvider = (props) => {
 
   useEffect(() => {
     const storedUserLoggedInInformation = localStorage.getItem('isLoggedIn');
-
+    check_login();
     if (storedUserLoggedInInformation === '1') {
       setIsLoggedIn(true);
     }
   }, []);
+
+  const check_login = () => {
+    fetch("http://localhost:5000/logged_user")
+    .then(response => {
+       console.log(response)
+       if (response.status === 200){
+          response.json().then(data => {
+             setIsLoggedIn(true);
+             setUsername(data.username)
+          })
+       }
+       else if (response.status === 400){
+        response.json().then(data => {
+            console.log(data.message)
+          setIsLoggedIn(false);
+        })
+     }
+      
+    })
+
+  }
 
   const logOutFetch = () => {
     fetch("http://localhost:5000/logout", {
