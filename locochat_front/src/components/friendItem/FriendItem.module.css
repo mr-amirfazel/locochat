@@ -1,0 +1,12 @@
+.friendItem{
+    width: 100%;
+    margin-top:0;
+    margin-bottom:12px;
+    background-color:rgb(212, 146, 157);
+    color: black;
+    font-size:1.45rem;
+    padding-left: .5rem;
+    border-radius:12px;
+    cursor: pointer;
+    /* font-family: sans-serif; */
+}

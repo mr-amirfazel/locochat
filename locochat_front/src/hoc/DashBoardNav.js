@@ -1,7 +1,5 @@
 import styleModule from './navBar/NavBar.module.css';
 import { Link } from "react-router-dom";
-import SignUpModal from "../components/signupmodal/SignUpModal";
-import LogInModal from "../components/loginmodal/LogInModal";
 import React, { useState, useContext } from 'react';
 import AuthContext from '../store/auth-context';
 
@@ -24,9 +22,11 @@ export default function DashBoardNav () {
 </button>
 </p>
 <span className={`${styleModule.devider}`}></span>
+  <Link to={'/friends'}>
   <p>
   <button className={`${styleModule.button}`}>Friends</button>
   </p>
+  </Link>
   <span className={`${styleModule.devider}`}></span>
   <p>
   <button className={`${styleModule.button}`}>Search</button>
@@ -52,7 +52,11 @@ export default function DashBoardNav () {
  
 </span>
 <p className={`${styleModule.username}`}>
+  <Link to={'/'}>
+    <button className={`${styleModule.button} text-warning`}>
     {ctx.username}
+    </button>
+  </Link>
   </p>
 </div>
 

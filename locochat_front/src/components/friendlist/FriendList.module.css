@@ -1,0 +1,13 @@
+.list_container{
+    width:95%;
+    margin: .5rem auto;
+    /* min-height: 20vh; */
+    height: 100%;
+    border-radius:8px;
+    overflow:scroll;
+    
+}
+.list {
+    list-style: none;
+    padding: 0;
+  }

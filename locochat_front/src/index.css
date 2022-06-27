@@ -34,18 +34,14 @@ body {
 :root {
   --text-color: white;
   --navbar-color: #4c0053;
-  --terminal-color: #f6e6d6;
   --sidelayout-background: #fcdcd9;
   --dummytext-color: #3d2378;
   --scoreBoard-infosColor: #4c0047;
   --left-terminal-background: #fbab7e;
   --title-color: rgb(122, 120, 120);
   --green-button: #28c240;
-  --scoreLine-color: #e9d6d5;
-  --scoreBoard-background-color: #f9eee3;
   --red-button: #ee514e;
   --orange-button: #f1b043;
-  --scoreBoard-titles: #99008d;
   --username-color: #f7830f;
 
   --navbar-length: 70px;

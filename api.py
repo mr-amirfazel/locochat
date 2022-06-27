@@ -10,6 +10,7 @@ from query_handler import sign_up
 from query_handler.log_in import log_in
 from query_handler.log_out import log_out
 from query_handler.logged_in_user import check_login
+from query_handler.friends_utils import *
 
 Store = store()
 
@@ -75,6 +76,27 @@ def logged_in_user():
         'message': 'no user is logged in'
     }
     return response, 400
+
+
+@web_app.route('/friends', methods=['POST'])
+def get_friends_list():
+    values = request.get_json()
+    friends = get_friends(values["username"])
+    friends_list = []
+    for row in friends:
+        friends_list.append(row[0])
+    print(friends_list)
+    friends = [{"username": friend} for friend in friends_list]
+    print(friends)
+    if len(friends) > 0:
+        response = {
+            'friends': friends
+        }
+        return jsonify(response), 200
+    response = {
+        'message': 'no friends found'
+    }
+    return jsonify(response), 400
 
 
 if __name__ == '__main__':
