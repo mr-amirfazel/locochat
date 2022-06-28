@@ -13,7 +13,6 @@ export default function Friends () {
 
     useEffect(() => {
         get_friends();
-        
       }, []);
 
       const get_friends = () => {
@@ -32,8 +31,10 @@ export default function Friends () {
            console.log(response)
            if (response.status === 200){
               response.json().then(data => {
-                console.log(data)
+                console.log('dade',data)
+                console.log('frens:',data.friends)
                  setFriends(data.friends)
+                 
               })
            }
            else if (response.status === 400){
@@ -44,6 +45,13 @@ export default function Friends () {
           
         })
       }
+      
+    const deleteHandler = (username) => {
+      console.log('delete',username)
+      const users = friends.filter(friend => friend.username !== username);
+      setFriends(users);
+  }
+
 
 
     return(
@@ -54,7 +62,7 @@ export default function Friends () {
             </div>
   <div className="card-body">
     {noFriends && <p className="text-danger text-center">No Friends found</p>}
-    {!noFriends && <FriendList friends={friends}/>}
+    {!noFriends && <FriendList friends={friends}  onDelete={deleteHandler}/>}
 
 
   </div>

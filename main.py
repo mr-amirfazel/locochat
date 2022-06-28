@@ -174,7 +174,6 @@ def message_prompt(src, messages):
         print('not enough entries')
         return {"command": ChatCommands.CLOSE}
     if command == 'like':
-        """TODO: get index, validate it, add to liked messages"""
         if not index_is_valid(chat_data[1], len(messages)):
             return {"command": ChatCommands.CLOSE}
         liked_index = int(chat_data[1]) - 1
@@ -219,7 +218,7 @@ def display_friends(user):
     username = user["username"]
     friends = get_friends(username)
     if len(friends) == 0:
-        print('YOU have no friends\nYou are alone\nGet a life loser...')
+        print('YOU have no friends')
     for ind, row in enumerate(friends):
         print('{}) {}'.format(ind + 1, row[0]))
 

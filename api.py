@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 import validation.signup_validation
+from query_handler.blocks_utils import *
 from validation import login_validation
 from store import store
 from validation import *
@@ -12,6 +13,7 @@ from query_handler.log_out import log_out
 from query_handler.logged_in_user import check_login
 from query_handler.friends_utils import *
 from query_handler.search import *
+from query_handler.friend_request_utils import *
 
 Store = store()
 
@@ -108,18 +110,74 @@ def search_for_user():
     print(search_res)
     if len(search_res) == 0:
         response = {
-            'message' : 'no User found'
+            'message': 'no User found'
         }
         return jsonify(response), 400
     result = []
     for row in search_res:
         result.append(row[0])
-    users = [{'username': res}for res in result]
+    users = [{'username': res} for res in result]
     response = {
         'users': users
     }
     return jsonify(response), 200
 
+
+@web_app.route('/add_friend', methods=['POST'])
+def add_friend():
+    values = request.get_json()
+    username = values["username"]
+    dst_username = values["dst_username"]
+    if has_blocked(username, dst_username):
+        res = {'message': 'you have blocked {} you have to unblock this user first'.format(dst_username)}
+        return jsonify(res), 400
+    if has_blocked(dst_username, username):
+        res = {'message': 'Since you have been blocked by {}, you cant send a friendship request to this user'.format(
+            dst_username)}
+        return jsonify(res), 400
+    if is_friend(username, dst_username):
+        res = {'message': 'You are already a friend of {}'.format(dst_username)}
+        return jsonify(res), 400
+    if request_exists(username, dst_username):
+        res = {'message': 'A request had already been sent to {}'.format(dst_username)}
+        return jsonify(res), 400
+    if reverse_request(username, dst_username):
+        res = {
+            'message': 'A request had already been sent from {} to you. You can go and accept it'.format(dst_username)}
+        return jsonify(res), 400
+    send_request(username, dst_username)
+    res = {
+        'message': 'successfully sent friend request to {} '.format(dst_username)
+    }
+    return jsonify(res), 200
+
+
+@web_app.route('/block', methods=['POST'])
+def block():
+    values = request.get_json()
+    username = values["username"]
+    dst_username = values["dst_username"]
+
+    if has_blocked(username, dst_username):
+        res = {'message': 'you already have blocked user with username: {}'.format(dst_username)}
+        return jsonify(res), 400
+    if is_friend(username, dst_username):
+        remove_friends(username, dst_username)
+
+    block_user(username, dst_username)
+    res = {'message': 'successfully blocked {}'.format(dst_username)}
+    return jsonify(res), 200
+
+
+@web_app.route('/unfriend', methods=['POST'])
+def unfriend():
+    print('arrrrrrrrrrrr')
+    values = request.get_json()
+    username = values["username"]
+    dst_username = values["dst_username"]
+    remove_friends(username, dst_username)
+    res = {'message': 'Unfriended with {}'.format(dst_username)}
+    return jsonify(res), 200
 
 
 if __name__ == '__main__':

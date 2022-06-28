@@ -9,5 +9,12 @@
     padding-left: .5rem;
     border-radius:12px;
     cursor: pointer;
-    /* font-family: sans-serif; */
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.delete{
+    margin-top:2%;
+    margin-right:2%;
 }
