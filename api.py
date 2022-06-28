@@ -11,6 +11,7 @@ from query_handler.log_in import log_in
 from query_handler.log_out import log_out
 from query_handler.logged_in_user import check_login
 from query_handler.friends_utils import *
+from query_handler.search import *
 
 Store = store()
 
@@ -97,6 +98,28 @@ def get_friends_list():
         'message': 'no friends found'
     }
     return jsonify(response), 400
+
+
+@web_app.route('/search', methods=['POST'])
+def search_for_user():
+    values = request.get_json()
+    print(values["username"])
+    search_res = search(values["username"])
+    print(search_res)
+    if len(search_res) == 0:
+        response = {
+            'message' : 'no User found'
+        }
+        return jsonify(response), 400
+    result = []
+    for row in search_res:
+        result.append(row[0])
+    users = [{'username': res}for res in result]
+    response = {
+        'users': users
+    }
+    return jsonify(response), 200
+
 
 
 if __name__ == '__main__':

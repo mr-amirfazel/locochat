@@ -28,9 +28,11 @@ export default function DashBoardNav () {
   </p>
   </Link>
   <span className={`${styleModule.devider}`}></span>
+  <Link to={'/search'}>
   <p>
   <button className={`${styleModule.button}`}>Search</button>
   </p>
+  </Link>
   <span className={`${styleModule.devider}`}></span>
   <p>
   <button className={`${styleModule.button}`}>Friend requests</button>

@@ -58,7 +58,8 @@ export default function Friends () {
 
 
   </div>
-  <div className="card-footer text-muted  d-flex justify-content-center align-content-center">
+  <div className="card-footer text-muted h-25  d-flex justify-content-center align-content-center">
+    {ctx.username}'s friends
   </div>
         </div>
         </div>
