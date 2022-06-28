@@ -12,6 +12,7 @@ import Welcome from './layouts/welcome/Welcome'
 import AuthContext from './store/auth-context';
 import Friends from './components/friends/Friends';
 import Search from './components/Search/Search';
+import Requests from './components/requests/Requests';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
      <Routes>
     {ctx.isLoggedIn && <Route path="/friends" element={<Friends />} />}
     {ctx.isLoggedIn && <Route path="/search" element={<Search />} />}
+    {ctx.isLoggedIn && <Route path="/requests" element={<Requests />} />}
     </Routes>
     </>  
   )

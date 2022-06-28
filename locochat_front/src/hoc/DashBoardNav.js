@@ -34,9 +34,11 @@ export default function DashBoardNav () {
   </p>
   </Link>
   <span className={`${styleModule.devider}`}></span>
+  <Link to={'/requests'}>
   <p>
   <button className={`${styleModule.button}`}>Friend requests</button>
   </p>
+  </Link>
   <span className={`${styleModule.devider}`}></span>
   <p>
   <button className={`${styleModule.button}`}>Blocked Users</button>

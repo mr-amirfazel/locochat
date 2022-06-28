@@ -171,12 +171,40 @@ def block():
 
 @web_app.route('/unfriend', methods=['POST'])
 def unfriend():
-    print('arrrrrrrrrrrr')
     values = request.get_json()
     username = values["username"]
     dst_username = values["dst_username"]
     remove_friends(username, dst_username)
     res = {'message': 'Unfriended with {}'.format(dst_username)}
+    return jsonify(res), 200
+
+@web_app.route('/sent_requests', methods=['POST'])
+def sent_reqs():
+    values = request.get_json()
+    username = values["username"]
+    sent_request_list = sent_requests(username)
+    if len(sent_request_list) == 0:
+        res = {'message': 'no request found'}
+        return jsonify(res), 400
+    sent_list = []
+    for row in sent_request_list:
+        sent_list.append({'username': row[0], 'situation': row[1]})
+    res = {'requests': sent_list}
+    return jsonify(res), 200
+
+
+@web_app.route('/received_requests', methods=['POST'])
+def rec_reqs():
+    values = request.get_json()
+    username = values["username"]
+    rc_request_list = received_requests(username)
+    if len(rc_request_list) == 0:
+        res = {'message': 'no request found'}
+        return jsonify(res), 400
+    rc_list = []
+    for row in rc_request_list:
+        rc_list.append({'username': row[0], 'situation': row[1]})
+    res = {'requests': rc_list}
     return jsonify(res), 200
 
 

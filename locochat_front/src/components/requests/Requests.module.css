@@ -1,0 +1,14 @@
+.requests_container{
+    position: fixed;
+    top: 15vh;
+    width:80%;
+    left:12%;
+    height:65vh;
+}
+.requests_inner{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+    text-align: center;
+    height: 100%;
+}

@@ -5,12 +5,7 @@ import FriendItem from '../friendItem/FriendItem';
 
 export default function FriendList(props) {
 
-    const [friends, setFriends] = useState(props.friends);
 
-   
-
-
-    console.log('arrrrr',friends);
 
     return (
 <div className={`${classes.list_container}`}>
