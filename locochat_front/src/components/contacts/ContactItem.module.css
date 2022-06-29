@@ -1,0 +1,19 @@
+.contact_item{
+    display:flex;
+    flex-direction:row;
+    width:95%;
+    background: rgb(78,170,74);
+    background: linear-gradient(73deg, rgba(78,170,74,1) 0%, rgba(64,66,175,1) 100%);  
+    margin-bottom: 4px; 
+    margin-left: 2%;
+    margin-top: 2%;
+    border-radius:4px;
+    cursor: pointer;
+}
+.contact_item p{
+    margin:2%;
+    padding:2%;
+    font-size:1.2rem;
+    font-weight:bold;
+    color:yellow;
+}

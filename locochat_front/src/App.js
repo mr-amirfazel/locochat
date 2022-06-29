@@ -14,6 +14,7 @@ import Friends from './components/friends/Friends';
 import Search from './components/Search/Search';
 import Requests from './components/requests/Requests';
 import Blocks from './components/Blocks/Blocks';
+import Contacts from './components/contacts/Contacts';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
     {ctx.isLoggedIn && <Route path="/search" element={<Search />} />}
     {ctx.isLoggedIn && <Route path="/requests" element={<Requests />} />}
     {ctx.isLoggedIn && <Route path="/blocks" element={<Blocks />} />}
+    {ctx.isLoggedIn && <Route path="/chats" element={<Contacts />} />}
     </Routes>
     </>  
   )

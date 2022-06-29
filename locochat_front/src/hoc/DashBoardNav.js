@@ -23,11 +23,13 @@ export default function DashBoardNav () {
         <div className={`${styleModule.navBar}`}>
 
   <span className={`${styleModule.leftSpan}`}>
+  <Link to='/chats'>
  <p>
  <button className={`${styleModule.button}`}>
   Chats 
 </button>
 </p>
+</Link>
 <span className={`${styleModule.devider}`}></span>
   <Link to={'/friends'}>
   <p>

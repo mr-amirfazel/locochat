@@ -15,6 +15,7 @@ from query_handler.friends_utils import *
 from query_handler.search import *
 from query_handler.friend_request_utils import *
 from query_handler.delete_account_utils import *
+from query_handler.messages_utils import *
 
 Store = store()
 
@@ -243,6 +244,24 @@ def delete_acc():
     username = values["username"]
     remove_user(username)
     res = {'message': 'user deleted account successfully'}
+    return jsonify(res), 200
+
+
+@web_app.route('/contacts', methods=['POST'])
+def contacts():
+    values = request.get_json()
+    username = values["username"]
+    contact_list = get_contacts({"username": username})
+    if len(contact_list) == 0:
+        res = {'message': 'no chats found.....'}
+        return jsonify(res), 400
+    contacts_json = []
+    for row in contact_list:
+        if row[0] is None:
+            contacts_json.append({'username': 'Deleted Account', 'token': row[1]})
+        else:
+            contacts_json.append({'username': row[0], 'token': row[1]})
+    res = {'contacts': contacts_json}
     return jsonify(res), 200
 
 
