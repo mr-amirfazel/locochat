@@ -1,0 +1,21 @@
+.BlockItem
+{
+    background: rgb(237,196,63);
+    background: linear-gradient(95deg, rgba(237,196,63,1) 0%, rgba(242,119,20,1) 28%, rgba(244,54,18,1) 62%, rgba(84,51,238,1) 100%);
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    width:100%;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    justify-content:space-around;
+
+}
+.icon{
+    margin-top:4px;
+}
+.time{
+    font-size:1.2em;
+    font-weight:bold;
+}

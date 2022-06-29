@@ -12,6 +12,13 @@ export default function DashBoardNav () {
         console.log(ctx.isLoggedIn)
       }
 
+    const deleteAccount = () => {
+        console.log('arrrrrrrrrr')
+        ctx.onDeleteAccount()
+        // console.log(ctx.isLoggedIn)
+      }
+    
+
     return(
         <div className={`${styleModule.navBar}`}>
 
@@ -40,20 +47,20 @@ export default function DashBoardNav () {
   </p>
   </Link>
   <span className={`${styleModule.devider}`}></span>
+  <Link to={'/blocks'}>
   <p>
   <button className={`${styleModule.button}`}>Blocked Users</button>
   </p>
+  </Link>
   <span className={`${styleModule.devider}`}></span>
   <p>
   <button className={`${styleModule.button}`} onClick={close}>LogOut</button>
   </p>
   <span className={`${styleModule.devider}`}></span>
   <p>
-  <button className={`${styleModule.button}`}>Delete Account</button>
+  <button className={`${styleModule.button}`} onClick={deleteAccount}>Delete Account</button>
   </p>
 
-  
- 
 </span>
 <p className={`${styleModule.username}`}>
   <Link to={'/'}>
@@ -63,6 +70,5 @@ export default function DashBoardNav () {
   </Link>
   </p>
 </div>
-
-    );
+);
 }

@@ -1,0 +1,28 @@
+.Blocks{
+    position: fixed;
+    top: 15vh;
+    left:16%;
+    width: 65%;
+    border-radius: 10px;
+    height: 65vh;
+    background-color:rgb(246, 213, 213);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.blocks h2{
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: rgb(15, 25, 80);
+    padding:4px;
+}
+.blocks header{
+    border-bottom: 1px solid rgb(136, 3, 3);
+    margin-bottom:12px;
+}
+.inner{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+}

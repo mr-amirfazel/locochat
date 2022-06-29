@@ -14,6 +14,7 @@ from query_handler.logged_in_user import check_login
 from query_handler.friends_utils import *
 from query_handler.search import *
 from query_handler.friend_request_utils import *
+from query_handler.delete_account_utils import *
 
 Store = store()
 
@@ -178,6 +179,7 @@ def unfriend():
     res = {'message': 'Unfriended with {}'.format(dst_username)}
     return jsonify(res), 200
 
+
 @web_app.route('/sent_requests', methods=['POST'])
 def sent_reqs():
     values = request.get_json()
@@ -205,6 +207,42 @@ def rec_reqs():
     for row in rc_request_list:
         rc_list.append({'username': row[0], 'situation': row[1]})
     res = {'requests': rc_list}
+    return jsonify(res), 200
+
+
+@web_app.route('/blocks', methods=['POST'])
+def blocks():
+    values = request.get_json()
+    username = values["username"]
+    block_list = get_blocked_users(username)
+    if len(block_list) == 0:
+        res = {'message': 'no blocked users were found'}
+        return res, 400
+    blocked_users = []
+    for row in block_list:
+        blocked_users.append({'username': row[0], 'time': str(row[1])})
+    res = {
+        'blocks': blocked_users
+    }
+    return jsonify(res), 200
+
+
+@web_app.route('/unblock', methods=['POST'])
+def unblock():
+    values = request.get_json()
+    username = values["username"]
+    dst_username = values["dst_username"]
+    remove_blocked(username, dst_username)
+    res = {'message': 'unblocked {} successfully'.format(dst_username)}
+    return jsonify(res), 200
+
+
+@web_app.route('/delete_account', methods=['POST'])
+def delete_acc():
+    values = request.get_json()
+    username = values["username"]
+    remove_user(username)
+    res = {'message': 'user deleted account successfully'}
     return jsonify(res), 200
 
 
