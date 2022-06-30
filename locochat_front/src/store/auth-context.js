@@ -58,7 +58,7 @@ export const AuthContextProvider = (props) => {
        console.log(response)
        if (response.status === 200){
           response.json().then(data => {
-             alert(data.message)
+             console.log(data.message)
           })
        }
       
@@ -81,7 +81,7 @@ export const AuthContextProvider = (props) => {
        console.log(response)
        if (response.status === 200){
           response.json().then(data => {
-             alert(data.message)
+             console.log(data.message)
           })
        }
       
