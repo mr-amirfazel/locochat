@@ -19,7 +19,7 @@
   also it is implemented in a way that only one user can use app with no matter how many tabs of app you open, it well only display one users dashboard
   <br />
   <br />
-  this project is build with python and used mysql as database <br/>
+  this project is built with python and used mysql as database <br/>
   also there exists a User Interface made with React.js and an api using flask <br /> <br />
   *note that the UI doesnt have the user limitation ability (yet)* <br/>
   code duplication in react components is in the 'OOOOOF' level and it could have better design patterns so feel free to contribute :)
