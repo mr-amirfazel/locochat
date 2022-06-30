@@ -1,0 +1,10 @@
+.search_item{
+    width:100%;
+    background: rgb(240,118,26);
+    background: linear-gradient(95deg, rgba(240,118,26,1) 0%, rgba(255,247,0,1) 100%);
+    padding:4px;
+    font-weight:bold;
+    cursor: pointer;
+    margin-bottom:1em;
+    border-radius:5px;
+}

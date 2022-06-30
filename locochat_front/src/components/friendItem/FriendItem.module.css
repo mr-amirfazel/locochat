@@ -1,0 +1,20 @@
+.friendItem{
+    width: 100%;
+    margin-top:0;
+    margin-bottom:12px;
+    background: rgb(227,127,244);
+    background: linear-gradient(95deg, rgba(227,127,244,1) 0%, rgba(222,167,116,1) 100%);
+    color: black;
+    font-size:1.45rem;
+    padding-left: .5rem;
+    border-radius:12px;
+    cursor: pointer;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.delete{
+    margin-top:2%;
+    margin-right:2%;
+}

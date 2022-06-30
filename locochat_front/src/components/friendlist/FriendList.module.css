@@ -1,0 +1,14 @@
+.list_container{
+    width:95%;
+    margin: .5rem auto;
+    /* min-height: 20vh; */
+    height: 55vh;
+    border-radius:8px;
+    overflow-y:auto;
+    
+}
+.list {
+    list-style: none;
+    padding: 0;
+    overflow-y:auto;
+  }

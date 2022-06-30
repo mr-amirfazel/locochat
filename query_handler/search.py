@@ -7,7 +7,6 @@ cursor = db.cursor()
 
 
 def search(searched_user):
-
     sql = """
     select userID 
     from `users`

@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+	background: linear-gradient(-45deg, #ad31ec, #e73c7e, #23a6d5, #2357f3);
+	background-size: 400% 400%;
+	animation: gradient 5s ease infinite;
+	height: 100vh;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+  25% {
+    background-position: 80% 30%;
+  }
+	50% {
+		background-position: 100% 50%;
+	}
+  75% {
+    background-position: 20% 10%;
+  }
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+:root {
+  --text-color: white;
+  --navbar-color: #4c0053;
+  --sidelayout-background: #fcdcd9;
+  --dummytext-color: #3d2378;
+  --scoreBoard-infosColor: #4c0047;
+  --left-terminal-background: #fbab7e;
+  --title-color: rgb(122, 120, 120);
+  --green-button: #28c240;
+  --red-button: #ee514e;
+  --orange-button: #f1b043;
+  --username-color: #f7830f;
+
+  --navbar-length: 70px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

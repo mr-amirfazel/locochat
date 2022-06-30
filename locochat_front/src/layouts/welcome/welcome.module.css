@@ -1,0 +1,11 @@
+.welcome{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    justify-items: center;
+    height:100vh
+}
+.text{ 
+    font-size: 4rem;
+    color: black;
+}
