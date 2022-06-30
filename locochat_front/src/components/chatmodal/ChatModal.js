@@ -10,6 +10,7 @@ export default function ChatModal(props){
     const [messages, setMessages] = useState([]);
     const [error, setError] =useState('');
     const [content, setContent] = useState('');
+    const [fetchReady, setFetchReady] = useState(false);
 
 
     const ctx = useContext(AuthContext);
@@ -20,8 +21,7 @@ export default function ChatModal(props){
             method: "POST",
             body: JSON.stringify({
               src_username: ctx.username,
-              dst_token: props.token,
-              type:props.type
+              dst_token: props.token
             }),
              
             headers: {
@@ -52,8 +52,7 @@ export default function ChatModal(props){
             method: "POST",
             body: JSON.stringify({
                src_username: ctx.username,
-               dst_token: props.token,
-               type:props.type
+               dst_token: props.token
                
             }),
             headers: {
@@ -64,6 +63,7 @@ export default function ChatModal(props){
             if (response.status === 200){
                 response.json().then(data => {
                     console.log(data.message);
+                    setFetchReady(true);
                 })
             }   
         }
@@ -74,7 +74,9 @@ export default function ChatModal(props){
 
     useEffect(() => {
         seenMessages();
-       fetchMessages();
+        // if (fetchReady){
+            fetchMessages();
+        // }
     }
     ,[])
 
@@ -91,8 +93,7 @@ export default function ChatModal(props){
                 body: JSON.stringify({
                     src_username: ctx.username,
                     dst_token: props.token,
-                    content: content,
-                    type:props.type
+                    content: content
                 }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
@@ -117,10 +118,10 @@ export default function ChatModal(props){
         <div className={classes.backdrop} onClick={props.onClose}/>
         <div className={classes.modal}>
             <div className='card'>
-                <div class="card-header bg-info">
-                    <h5 class="card-title text-center">{props.title}</h5>
+                <div className="card-header bg-info">
+                    <h5 className="card-title text-center">{props.title}</h5>
                 </div>
-                <div class={`card-body`}>
+                <div className={`card-body`}>
                 <div className={classes.inner}>
                     <div className={classes.results}>
                     {error.trim().length ==0 && messages.map(message =>

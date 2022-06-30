@@ -30,9 +30,9 @@ def add_friends(username, friend_ID):
 
 def get_friends(username):
     sql = """
-    select friendID
-    from `friends`
-    where userID = %s
+    SELECT F.friendID, U.token
+    FROM friends as F, users as U
+    where F.userID = %s and F.friendID = U.userID;
     """
     val = (username,)
 

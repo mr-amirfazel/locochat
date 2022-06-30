@@ -1,10 +1,13 @@
 import classes from './FriendItem.module.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AuthContext from '../../store/auth-context';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
+import ChatModal from '../chatmodal/ChatModal';
 
 
 export default function FriendItem (props){
+
+    const [showModal, setShowModal] = useState(false);
 
     const ctx = useContext(AuthContext);
 
@@ -35,10 +38,17 @@ export default function FriendItem (props){
         props.onDelete(props.username)
     }
 
+    const showModalHandler = (e) => {
+        e.preventDefault();
+        setShowModal(prev => !prev)
+    }
+
     return (
+        <>
+        {showModal && <ChatModal token={props.token} title={props.username} onClose={showModalHandler}/>}
         <li>
-            <div className={`${classes.friendItem}`}>
-            <p className="py-2 px-2 ">
+            <div className={`${classes.friendItem}`} onClick={showModalHandler}>
+            <p className="py-2 px-2 " >
                 {props.username}
             </p>
             <div className={`${classes.delete}`} onClick={deleteHandler}>
@@ -46,5 +56,6 @@ export default function FriendItem (props){
             </div>
             </div>
         </li>
+        </>
     );
 }

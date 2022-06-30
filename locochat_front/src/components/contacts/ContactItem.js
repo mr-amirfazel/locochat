@@ -17,10 +17,12 @@ export default function ContactItem (props) {
 
     
 
+    
+
 
     return (
         <>
-        {showModal && <ChatModal type="chat" token={props.token} title={props.username} onClose={showModalHandler}/>}
+        {showModal && <ChatModal  token={props.token} title={props.username} onClose={showModalHandler}/>}
         <li>
         <div className={classes.contact_item} onClick={showModalHandler}>
             <p>{props.username}</p>

@@ -10,7 +10,7 @@ export default function FriendList(props) {
     return (
 <div className={`${classes.list_container}`}>
     <ul className={`${classes.list}`}>
-    {props.friends.map(friend => (<FriendItem key={friend.username} username={friend.username} onDelete={props.onDelete}/>))}
+    {props.friends.map(friend => (<FriendItem key={friend.username} username={friend.username} token={friend.token} onDelete={props.onDelete}/>))}
     </ul>
 </div>
     );

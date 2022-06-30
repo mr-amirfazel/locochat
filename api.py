@@ -91,13 +91,11 @@ def get_friends_list():
     friends = get_friends(values["username"])
     friends_list = []
     for row in friends:
-        friends_list.append(row[0])
+        friends_list.append({'username': row[0], 'token': row[1]})
     print(friends_list)
-    friends = [{"username": friend} for friend in friends_list]
-    print(friends)
     if len(friends) > 0:
         response = {
-            'friends': friends
+            'friends': friends_list
         }
         return jsonify(response), 200
     response = {
@@ -284,7 +282,11 @@ def chatroom():
     dst_token = values["dst_token"]
     src = get_user(src_username)
     dst = get_user_by_token(dst_token)
+    print(src)
+    print(dst)
     messages = get_chat(src, dst)
+    if messages is None:
+        return jsonify({'message': 'nothing...'}), 400
     if len(messages) == 0:
         res = {
             'message': 'no chat found'
@@ -327,24 +329,27 @@ def like():
 @web_app.route('/seen', methods=['POST'])
 def set_seen():
     values = request.get_json()
+
     src_username = values["src_username"]
     dst_token = values["dst_token"]
-    print(src_username)
-    print(dst_token)
     src = get_user(src_username)
     dst = get_user_by_token(dst_token)
+
     make_seen_message(src, dst)
     res = {'message': 'seen messages'}
     return jsonify(res), 200
 
+
 @web_app.route('/send_message', methods=['POST'])
 def send_msg():
     values = request.get_json()
+
     src_username = values["src_username"]
     dst_token = values["dst_token"]
-    content = values["content"]
     src = get_user(src_username)
     dst = get_user_by_token(dst_token)
+
+    content = values["content"]
     message_obj = send_message(src, dst, content)
     sender_ID = message_obj[3]
     receiver_user_ID = message_obj[4]
@@ -366,8 +371,6 @@ def send_msg():
         'likes': [item[0] for item in likes]
     }}
     return jsonify(res), 200
-
-
 
 
 if __name__ == '__main__':

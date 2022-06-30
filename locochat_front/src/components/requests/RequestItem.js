@@ -11,7 +11,7 @@ export default function RequestItem (props){
            <div className={`${classes.RequestItem}`}>
             <span>{props.username}</span>
             <span  className={`${classes.status}`}>{props.status}</span>
-            {props.type === 'REC' && props.status === 'PENDING' &&
+            {props.type === 'REC' && props.status === 'pending' &&
                 <div className={`${classes.actions}`}>
                     <CheckCircleSharpIcon />
                     <HighlightOffSharpIcon />
