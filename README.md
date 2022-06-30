@@ -4,7 +4,8 @@
 ### UI
 ![to-go_edit1](https://user-images.githubusercontent.com/78591315/176680600-71bfb0c6-2a60-49b1-85f9-29f9bc347c6f.gif)
 ### cli
-![image](https://user-images.githubusercontent.com/78591315/176680846-4ef062bb-3544-4b50-b63f-6b2826e01e2c.png)
+![image](https://user-images.githubusercontent.com/78591315/176684957-1fca46c9-3d3c-4b38-a54c-22a4389ce6e1.png)
+
 
 
 ## Naming  <br/>
