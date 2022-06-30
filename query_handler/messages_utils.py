@@ -71,6 +71,7 @@ def send_message(src, dst, message_content):
     try:
         cursor.execute(sql, val)
         db.commit()
+        return val
 
     except Exception as inst:
         print(inst)

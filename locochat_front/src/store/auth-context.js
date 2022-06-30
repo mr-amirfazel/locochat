@@ -4,7 +4,8 @@ const AuthContext = React.createContext({
     username: '',
     isLoggedIn: false,
   onLogout: () => {},
-  onLogin: (username) => {}
+  onLogin: (username) => {},
+  onDeleteAccount: () => {}
 });
 
 export const AuthContextProvider = (props) => {
@@ -57,7 +58,30 @@ export const AuthContextProvider = (props) => {
        console.log(response)
        if (response.status === 200){
           response.json().then(data => {
-             alert(data.message)
+             console.log(data.message)
+          })
+       }
+      
+    })
+
+  }
+  const deleteAccountFetch = (tmp) => {
+    fetch("http://localhost:5000/delete_account", {
+     
+        method: "POST",
+        body: JSON.stringify({
+          username: tmp,
+        }),
+         
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+    .then(response => {
+       console.log(response)
+       if (response.status === 200){
+          response.json().then(data => {
+             console.log(data.message)
           })
        }
       
@@ -77,6 +101,15 @@ export const AuthContextProvider = (props) => {
     setUsername(ID);
   };
 
+  const deleteAccountHandler = () => {
+    const temp_username = username;
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+    setUsername('');
+    logOutFetch();
+    deleteAccountFetch(temp_username);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -84,6 +117,7 @@ export const AuthContextProvider = (props) => {
         isLoggedIn: isLoggedIn,
         onLogout: logoutHandler,
         onLogin: loginHandler,
+        onDeleteAccount: deleteAccountHandler,
       }}
     >
       {props.children}
