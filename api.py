@@ -373,6 +373,21 @@ def send_msg():
     return jsonify(res), 200
 
 
+@web_app.route('/update_situation', methods=['POST'])
+def update_req():
+    values = request.get_json()
+    src = values["src_username"]
+    dst = values["dst_username"]
+    situation = values["situation"]
+    update_request(src, dst, situation)
+    if situation == RequestLevels.ACCEPTED:
+        add_friends(src, dst)
+    res = {'message': 'successfully changed the request situation', 'status': situation}
+    return jsonify(res), 200
+
+
+
+
 if __name__ == '__main__':
     from argparse import ArgumentParser
 
