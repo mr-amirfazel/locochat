@@ -33,12 +33,21 @@ the ERD table is shown below
  - clone this repo
  - add the sql file in db folder to your mysql app
  - change the mysql conncetion entries in `connect.py`
- - if you want to use the cli app, enter cmd and use command `python main.py`
+ - if you want to use the cli app, enter cmd and use command 
+ ```
+ python main.py
+ ```
  ### to use the ui app
  - run the flask server <br/>
-  `python api.py`
+  ```
+  python api.py
+  ```
  - enter the locochat front folder <br/>
- `npm install` <br/>
- `npm start`<br/>
+ ```
+ npm install
+ ``` 
+ ```
+ npm start
+ ```
 ** be sure to install Flask and Flask_cors packages **
  
