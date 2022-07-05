@@ -16,7 +16,7 @@
   
 ## About this project
   this is a non-realtime chat app meaning there is no concept of client & server implemented <br/>
-  also it is implemented in a way that only one user can use app with no matter how many tabs of app you open, it well only display one users dashboard
+  also it is implemented in a way that only one user can use app with no matter how many tabs of app you open, it will only display one users dashboard
   <br />
   <br />
   this project is built with python and used mysql as database <br/>
